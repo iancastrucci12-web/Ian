@@ -1,0 +1,2160 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ian y Lu</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#7A3B58">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Ian y Lu">
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root{
+    --paper:#EEF0EA;
+    --surface:#FFFFFF;
+    --surface-2:#F7F8F3;
+    --ink:#202824;
+    --ink-soft:#5B655B;
+    --line:#D9DCD0;
+    --wine:#7A3B58;
+    --wine-soft:#F3E7ED;
+    --moss:#4F6B4A;
+    --moss-soft:#E9EFE5;
+    --gold:#B8873A;
+    --good:#2F8F5B;
+    --good-soft:#E4F2E9;
+    --warn:#C99A3E;
+    --warn-soft:#FBF1DE;
+    --bad:#B4453A;
+    --bad-soft:#FBE7E4;
+    --shadow: 0 1px 2px rgba(32,40,36,.06), 0 6px 20px rgba(32,40,36,.06);
+    --radius: 14px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --paper:#161B17;
+      --surface:#1F2621;
+      --surface-2:#242C25;
+      --ink:#E9ECE5;
+      --ink-soft:#A6AFA1;
+      --line:#333B33;
+      --wine:#D98FAE;
+      --wine-soft:#3A2530;
+      --moss:#8FB285;
+      --moss-soft:#243024;
+      --gold:#D9AE6F;
+      --good:#7BC79A;
+      --good-soft:#1E3126;
+      --warn:#E0BB6E;
+      --warn-soft:#3A311F;
+      --bad:#E28579;
+      --bad-soft:#3A2320;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"]{
+    --paper:#161B17;
+    --surface:#1F2621;
+    --surface-2:#242C25;
+    --ink:#E9ECE5;
+    --ink-soft:#A6AFA1;
+    --line:#333B33;
+    --wine:#D98FAE;
+    --wine-soft:#3A2530;
+    --moss:#8FB285;
+    --moss-soft:#243024;
+    --gold:#D9AE6F;
+    --good:#7BC79A;
+    --good-soft:#1E3126;
+    --warn:#E0BB6E;
+    --warn-soft:#3A311F;
+    --bad:#E28579;
+    --bad-soft:#3A2320;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 8px 24px rgba(0,0,0,.35);
+    color-scheme: dark;
+  }
+
+  *{box-sizing:border-box;}
+  @media (prefers-reduced-motion: reduce){
+    *{ animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important; }
+  }
+  @keyframes fadeIn{ from{ opacity:0; transform:translateY(6px); } to{ opacity:1; transform:translateY(0); } }
+  @keyframes checkPop{ 0%{ transform:scale(.6); } 60%{ transform:scale(1.15); } 100%{ transform:scale(1); } }
+  @keyframes overlayFade{ from{ opacity:0; } to{ opacity:1; } }
+  @keyframes modalPop{ from{ opacity:0; transform:scale(.94) translateY(8px); } to{ opacity:1; transform:scale(1) translateY(0); } }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Work Sans', system-ui, -apple-system, sans-serif;
+    font-size:15px; line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+  }
+  h1,h2,h3,.display{
+    font-family:'Fraunces', Georgia, serif;
+    text-wrap:balance;
+    font-weight:600;
+    letter-spacing:-0.01em;
+    margin:0;
+  }
+  .mono{ font-family:'IBM Plex Mono', ui-monospace, monospace; font-variant-numeric:tabular-nums; }
+  button{ font-family:inherit; }
+  a{ color:inherit; }
+  ::selection{ background:var(--wine-soft); }
+  :focus-visible{ outline:2px solid var(--wine); outline-offset:2px; }
+
+  #app{ display:flex; min-height:100vh; }
+
+  /* ---------- sidebar ---------- */
+  .sidebar{
+    width:236px; flex:none; background:var(--surface); border-right:1px solid var(--line);
+    display:flex; flex-direction:column; padding:20px 14px; gap:22px;
+    position:sticky; top:0; height:100vh;
+  }
+  .brand{ display:flex; align-items:center; gap:10px; padding:0 6px; }
+  .brand-mark{
+    width:34px; height:34px; border-radius:10px; flex:none;
+    background:linear-gradient(155deg, var(--wine), var(--moss));
+    display:flex; align-items:center; justify-content:center;
+    color:#fff; font-family:'Fraunces',serif; font-weight:700; font-size:17px;
+  }
+  .brand-name{ font-size:18px; }
+  .brand-date{ font-size:11.5px; color:var(--ink-soft); text-transform:capitalize; }
+
+  .nav-group-label{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:.09em;
+    color:var(--ink-soft); padding:0 10px; margin-bottom:2px; font-weight:600;
+  }
+  .nav-group{ display:flex; flex-direction:column; gap:2px; }
+  .nav-item{
+    display:flex; align-items:center; gap:10px; padding:8px 10px; border-radius:9px;
+    border:none; background:none; color:var(--ink); font-size:13.5px; cursor:pointer;
+    text-align:left; width:100%; transition:background-color .15s ease, color .15s ease;
+  }
+  .nav-item:hover{ background:var(--surface-2); }
+  .nav-item.active{ background:var(--moss-soft); color:var(--moss); font-weight:600; }
+  .nav-group.shared .nav-item.active{ background:var(--wine-soft); color:var(--wine); }
+  .nav-ico{ width:16px; text-align:center; font-size:14px; flex:none; }
+
+  .sidebar-foot{ margin-top:auto; display:flex; flex-direction:column; gap:8px; }
+  .account-pill{
+    border:1px solid var(--line); border-radius:11px; padding:8px 10px; background:var(--surface-2);
+    font-size:12.5px; color:var(--ink-soft); text-align:center;
+  }
+  .account-pill strong{ color:var(--ink); }
+  .settings-btn{
+    border:1px solid var(--line); background:var(--surface-2); border-radius:9px; padding:8px 10px;
+    font-size:12.5px; color:var(--ink-soft); cursor:pointer; display:flex; gap:8px; align-items:center;
+  }
+  .settings-btn:hover{ color:var(--ink); }
+
+  /* ---------- mobile top/bottom bars ---------- */
+  .mobile-bar{ display:none; }
+  .mobile-chips{ display:none; }
+
+  /* ---------- main ---------- */
+  main{ flex:1; min-width:0; padding:30px 34px 90px; max-width:920px; animation:fadeIn .22s ease; }
+  .section-head{ display:flex; align-items:baseline; justify-content:space-between; gap:14px; margin-bottom:20px; flex-wrap:wrap; }
+  .section-head h1{ font-size:26px; }
+  .section-sub{ color:var(--ink-soft); font-size:13px; margin-top:3px; }
+  .tag-shared, .tag-personal{
+    font-size:10.5px; text-transform:uppercase; letter-spacing:.08em; font-weight:700;
+    padding:3px 9px; border-radius:20px;
+  }
+  .tag-shared{ background:var(--wine-soft); color:var(--wine); }
+  .tag-personal{ background:var(--moss-soft); color:var(--moss); }
+
+  .btn{
+    border:1px solid var(--line); background:var(--surface); color:var(--ink); border-radius:10px;
+    padding:9px 14px; font-size:13px; font-weight:600; cursor:pointer; display:inline-flex; align-items:center; gap:6px;
+    transition:border-color .15s ease, filter .15s ease, transform .1s ease;
+  }
+  .btn:hover{ border-color:var(--ink-soft); }
+  .btn:active{ transform:scale(.97); }
+  .btn.primary{ background:var(--wine); border-color:var(--wine); color:#fff; }
+  .btn.primary:hover{ filter:brightness(1.06); }
+  .btn.primary.moss{ background:var(--moss); border-color:var(--moss); }
+  .btn.ghost{ border-color:transparent; background:none; }
+  .btn.small{ padding:5px 10px; font-size:12px; }
+  .btn.danger{ color:var(--bad); }
+
+  .grid-tiles{ display:grid; grid-template-columns:repeat(4,1fr); gap:12px; margin-bottom:26px; }
+  .tile{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius); padding:14px 16px;
+    box-shadow:var(--shadow); transition:transform .15s ease, box-shadow .15s ease;
+  }
+  .tile:hover{ transform:translateY(-2px); }
+  .tile.tile-accent{ display:flex; align-items:center; gap:12px; }
+  .tile-ico{
+    width:38px; height:38px; border-radius:11px; flex:none; display:flex; align-items:center; justify-content:center;
+    font-size:17px;
+  }
+
+  .hero{
+    position:relative; overflow:hidden; border-radius:20px; padding:30px 28px; margin-bottom:22px;
+    background:linear-gradient(135deg, #7A3B58 0%, #5c3a5a 45%, #4F6B4A 100%);
+    color:#fff; box-shadow:var(--shadow);
+  }
+  .hero-content{ position:relative; z-index:1; }
+  .hero-date{ font-size:12.5px; text-transform:capitalize; opacity:.85; margin-bottom:6px; }
+  .hero h1{ font-size:30px; color:#fff; margin-bottom:6px; }
+  .hero-sub{ font-size:14px; opacity:.92; max-width:420px; }
+  .hero-blob{ position:absolute; border-radius:50%; filter:blur(2px); opacity:.35; }
+  .hero-blob.b1{ width:220px; height:220px; background:#fff; top:-90px; right:-60px; opacity:.12; }
+  .hero-blob.b2{ width:140px; height:140px; background:#fff; bottom:-70px; right:80px; opacity:.10; }
+  .tile-label{ font-size:11.5px; color:var(--ink-soft); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px; }
+  .tile-value{ font-family:'Fraunces',serif; font-size:23px; font-weight:600; }
+  .tile-value.good{ color:var(--good); } .tile-value.bad{ color:var(--bad); }
+
+  .card{
+    background:var(--surface); border:1px solid var(--line); border-radius:var(--radius);
+    box-shadow:var(--shadow); padding:18px 20px; margin-bottom:16px;
+  }
+  .card h2{ font-size:16px; margin-bottom:10px; }
+
+  .list{ display:flex; flex-direction:column; }
+  .row{
+    display:flex; align-items:flex-start; gap:12px; padding:11px 2px; border-bottom:1px solid var(--line);
+  }
+  .row:last-child{ border-bottom:none; }
+  .check{
+    width:19px; height:19px; border-radius:6px; border:1.5px solid var(--line); flex:none; margin-top:2px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; background:var(--surface); font-size:12px;
+    transition:background-color .15s ease, border-color .15s ease;
+  }
+  .check.on{ background:var(--moss); border-color:var(--moss); color:#fff; animation:checkPop .28s ease; }
+  .row-body{ flex:1; min-width:0; }
+  .row-title{ font-size:14px; font-weight:500; }
+  .row-title.done{ text-decoration:line-through; color:var(--ink-soft); }
+  .row-meta{ display:flex; gap:8px; align-items:center; margin-top:4px; flex-wrap:wrap; }
+  .pill{
+    font-size:11px; padding:2px 8px; border-radius:20px; font-weight:600; white-space:nowrap;
+  }
+  .pill.neutral{ background:var(--surface-2); color:var(--ink-soft); }
+  .pill.warn{ background:var(--warn-soft); color:var(--warn); }
+  .pill.bad{ background:var(--bad-soft); color:var(--bad); }
+  .pill.good{ background:var(--good-soft); color:var(--good); }
+  .avatar{
+    width:20px; height:20px; border-radius:50%; flex:none; display:flex; align-items:center; justify-content:center;
+    font-size:10px; font-weight:700; color:#fff;
+  }
+  .row-actions{ display:flex; gap:4px; flex:none; }
+  .icon-btn{
+    border:none; background:none; color:var(--ink-soft); cursor:pointer; padding:4px; border-radius:6px; font-size:13px;
+  }
+  .icon-btn:hover{ background:var(--surface-2); color:var(--ink); }
+
+  .empty{ color:var(--ink-soft); font-size:13.5px; padding:18px 2px; text-align:center; }
+
+  /* forms */
+  .form{ display:flex; flex-direction:column; gap:10px; }
+  .form-row{ display:flex; gap:10px; flex-wrap:wrap; }
+  .field{ display:flex; flex-direction:column; gap:4px; flex:1; min-width:140px; }
+  .field label{ font-size:11.5px; color:var(--ink-soft); font-weight:600; }
+  .field input, .field select, .field textarea{
+    border:1px solid var(--line); border-radius:9px; padding:8px 10px; font-size:13.5px; background:var(--surface);
+    color:var(--ink); font-family:inherit;
+  }
+  .field textarea{ resize:vertical; min-height:56px; }
+  .field input:focus, .field select:focus, .field textarea:focus{ outline:2px solid var(--wine); outline-offset:0; }
+  .form-actions{ display:flex; gap:8px; justify-content:flex-end; margin-top:2px; }
+
+  /* finance ledger */
+  .ledger-row{
+    display:flex; align-items:center; gap:12px; padding:9px 2px; border-bottom:1px dashed var(--line);
+  }
+  .ledger-row:last-child{ border-bottom:none; }
+  .ledger-desc{ flex:1; min-width:0; }
+  .ledger-desc .cat{ font-size:11px; color:var(--ink-soft); }
+  .ledger-amt{ font-size:14px; font-weight:600; }
+  .ledger-amt.in{ color:var(--good); } .ledger-amt.out{ color:var(--bad); }
+  .chip-mini{
+    font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; font-weight:700; color:var(--ink-soft);
+    background:var(--surface-2); border-radius:8px; padding:1px 6px; vertical-align:middle;
+  }
+  .sheet-bar{
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+    background:var(--surface-2); border:1px solid var(--line); border-radius:10px; padding:8px 12px; margin-bottom:16px;
+  }
+  .bars{ display:flex; flex-direction:column; gap:8px; }
+  .bar-row{ display:flex; align-items:center; gap:10px; font-size:12.5px; }
+  .bar-label{ width:96px; flex:none; color:var(--ink-soft); }
+  .bar-track{ flex:1; height:8px; border-radius:6px; background:var(--surface-2); overflow:hidden; }
+  .bar-fill{ height:100%; background:var(--wine); border-radius:6px; }
+  .bar-val{ width:56px; text-align:right; flex:none; font-family:'IBM Plex Mono',monospace; }
+
+  /* calendar */
+  .cal-grid{ display:grid; grid-template-columns:repeat(7,1fr); gap:5px; margin-bottom:16px; }
+  .cal-dow{ text-align:center; font-size:10.5px; color:var(--ink-soft); text-transform:uppercase; padding-bottom:4px; }
+  .cal-cell{
+    aspect-ratio:1; border-radius:9px; background:var(--surface-2); display:flex; flex-direction:column;
+    align-items:center; justify-content:center; font-size:12.5px; gap:3px; position:relative;
+    cursor:pointer; transition:background-color .15s ease, transform .1s ease;
+  }
+  .cal-cell:hover{ background:var(--moss-soft); }
+  .cal-cell:active{ transform:scale(.94); }
+  .cal-cell.today{ background:var(--wine); color:#fff; font-weight:700; }
+  .cal-cell.today:hover{ background:var(--wine); filter:brightness(1.08); }
+  .cal-cell.empty{ background:none; cursor:default; }
+  .cal-dot{ width:5px; height:5px; border-radius:50%; background:var(--moss); }
+  .cal-cell.today .cal-dot{ background:#fff; }
+
+  /* goals */
+  .goal-progress{ height:8px; border-radius:6px; background:var(--surface-2); overflow:hidden; margin:8px 0; }
+  .goal-progress-fill{ height:100%; background:var(--wine); }
+
+  /* kanban (clients) */
+  .kanban{ display:grid; grid-template-columns:repeat(5,1fr); gap:12px; overflow-x:auto; }
+  .kanban-col{ background:var(--surface-2); border-radius:12px; padding:10px; min-width:150px; }
+  .kanban-col h3{ font-size:11.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); margin-bottom:8px; padding:0 2px; }
+  .client-card{
+    background:var(--surface); border:1px solid var(--line); border-radius:10px; padding:10px; margin-bottom:8px;
+    box-shadow:var(--shadow); font-size:12.5px;
+  }
+  .client-card .name{ font-weight:700; font-size:13.5px; margin-bottom:2px; }
+  .client-card .empresa{ color:var(--ink-soft); margin-bottom:6px; }
+  .client-card select{ width:100%; font-size:11.5px; border:1px solid var(--line); border-radius:6px; padding:4px 6px; margin-top:6px; background:var(--surface); color:var(--ink); }
+
+  /* clients table */
+  .ink-soft{ color:var(--ink-soft); }
+  .client-row{
+    display:grid; grid-template-columns:1.6fr .9fr 1fr .8fr .7fr 30px; gap:10px; align-items:center;
+    padding:12px 16px; border-bottom:1px solid var(--line); cursor:pointer; font-size:13px;
+  }
+  .client-row:last-child{ border-bottom:none; }
+  .client-row:hover{ background:var(--surface-2); }
+  .client-row-head{ cursor:default; font-size:11px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); background:var(--surface-2); }
+  .client-row-head:hover{ background:var(--surface-2); }
+  .cr-name{ font-weight:600; }
+  .cr-sub{ color:var(--ink-soft); font-size:12px; margin-top:2px; }
+  .cr-bad{ color:var(--bad); font-weight:600; }
+  .cr-warn{ color:var(--warn); font-weight:600; }
+  @media (max-width:720px){ .cr-hide-sm{ display:none; } .client-row{ grid-template-columns:1.6fr .9fr 30px; } }
+
+  /* AI assistant */
+  .ai-chat{ display:flex; flex-direction:column; gap:10px; max-height:360px; overflow-y:auto; }
+  .ai-msg{ padding:10px 14px; border-radius:12px; max-width:80%; }
+  .ai-msg.user{ background:var(--wine-soft); align-self:flex-end; }
+  .ai-msg.assistant{ background:var(--surface-2); align-self:flex-start; }
+  .ai-msg-role{ font-size:10.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--ink-soft); margin-bottom:3px; }
+  .ai-msg-text{ font-size:13.5px; white-space:pre-wrap; line-height:1.5; }
+
+  /* notes */
+  .notes-grid{ display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:12px; }
+  .note-card{ background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:14px; box-shadow:var(--shadow); }
+  .note-card h3{ font-size:14px; margin-bottom:6px; font-family:'Fraunces',serif; }
+  .note-card p{ font-size:12.5px; color:var(--ink-soft); white-space:pre-wrap; margin:0; }
+
+  /* messages */
+  .msg-feed{ display:flex; flex-direction:column; gap:12px; max-width:640px; }
+  .msg-bubble{
+    position:relative; padding:14px 40px 14px 16px; border-radius:16px; box-shadow:var(--shadow);
+    border:1px solid var(--line); background:var(--surface);
+  }
+  .msg-bubble.mine{ background:var(--wine-soft); border-color:var(--wine); align-self:flex-end; }
+  .msg-bubble.theirs{ align-self:flex-start; }
+  .msg-meta{ display:flex; justify-content:space-between; gap:10px; font-size:11.5px; color:var(--ink-soft); margin-bottom:6px; }
+  .msg-meta strong{ color:var(--wine); font-family:'Fraunces',serif; font-size:13px; }
+  .msg-text{ font-size:14px; white-space:pre-wrap; line-height:1.5; }
+  .msg-del{ position:absolute; top:8px; right:8px; opacity:.5; }
+  .msg-del:hover{ opacity:1; }
+
+  /* modal */
+  .overlay{
+    position:fixed; inset:0; background:rgba(20,24,20,.45); display:flex; align-items:center; justify-content:center;
+    z-index:50; padding:20px; animation:overlayFade .16s ease;
+  }
+  .modal{
+    background:var(--surface); border-radius:16px; padding:22px; width:100%; max-width:420px; box-shadow:var(--shadow);
+    max-height:86vh; overflow-y:auto; animation:modalPop .2s cubic-bezier(.25,.9,.35,1.15);
+  }
+  .modal h2{ font-size:18px; margin-bottom:14px; }
+
+  /* who-are-you chooser */
+  .chooser{
+    position:fixed; inset:0; background:var(--paper); z-index:60; display:flex; flex-direction:column;
+    align-items:center; justify-content:center; gap:26px; text-align:center; padding:20px;
+  }
+  .chooser h1{ font-size:30px; }
+  .chooser p{ color:var(--ink-soft); max-width:360px; }
+  .chooser-btns{ display:flex; gap:14px; flex-wrap:wrap; justify-content:center; }
+  .chooser-btn{
+    border:1.5px solid var(--line); background:var(--surface); border-radius:16px; padding:22px 30px;
+    font-family:'Fraunces',serif; font-size:19px; font-weight:600; cursor:pointer; min-width:150px;
+    box-shadow:var(--shadow); transition:border-color .15s ease, color .15s ease, transform .1s ease;
+  }
+  .chooser-btn:hover{ border-color:var(--wine); color:var(--wine); }
+  .chooser-btn:active{ transform:scale(.97); }
+
+  .sync-note{ font-size:11.5px; color:var(--ink-soft); display:flex; align-items:center; gap:6px; padding:0 6px; }
+  .dot{ width:6px; height:6px; border-radius:50%; background:var(--good); flex:none; }
+  .dot.off{ background:var(--warn); }
+  .dot.bad{ background:var(--bad); }
+  .banner{
+    background:var(--warn-soft); color:var(--warn); border-radius:10px; padding:9px 14px; font-size:12.5px;
+    margin-bottom:18px;
+  }
+  .reminder-card{ border-left:4px solid var(--warn); }
+  .reminder-card.has-overdue{ border-left-color:var(--bad); }
+  .reminder-card h2{ display:flex; align-items:center; gap:8px; }
+
+  .chart-row{ display:flex; gap:28px; align-items:center; flex-wrap:wrap; }
+  .chart-row .bars{ flex:1; min-width:180px; }
+  .donut{ flex:none; }
+
+  @media (max-width:860px){
+    .sidebar{ display:none; }
+    #app{ flex-direction:column; }
+    main{ padding:18px 16px 90px; max-width:none; }
+    .grid-tiles{ grid-template-columns:repeat(2,1fr); }
+    .kanban{ grid-template-columns:repeat(5,minmax(140px,1fr)); }
+    .mobile-bar{
+      display:flex; position:fixed; bottom:0; left:0; right:0; background:var(--surface); border-top:1px solid var(--line);
+      padding:8px 6px 10px; gap:2px; z-index:40; justify-content:space-around;
+    }
+    .mobile-bar button{
+      flex:1; display:flex; flex-direction:column; align-items:center; gap:2px; border:none; background:none;
+      color:var(--ink-soft); font-size:10px; padding:4px; border-radius:8px;
+    }
+    .mobile-bar button.active{ color:var(--wine); }
+    .mobile-top{
+      display:flex; align-items:center; justify-content:space-between; padding:14px 16px 4px; position:sticky; top:0;
+      background:var(--paper); z-index:30;
+    }
+    .mobile-chips{
+      display:flex; gap:6px; overflow-x:auto; padding:8px 16px 2px; position:sticky; top:44px; background:var(--paper); z-index:29;
+    }
+    .chip{
+      flex:none; border:1px solid var(--line); background:var(--surface); border-radius:20px; padding:6px 12px;
+      font-size:12px; color:var(--ink-soft); white-space:nowrap;
+    }
+    .chip.on{ background:var(--moss); border-color:var(--moss); color:#fff; }
+  }
+  @media (min-width:861px){ .mobile-top{ display:none; } }
+</style>
+</head>
+<body>
+<div id="app"></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ---------------- Supabase ---------------- */
+  var SUPABASE_URL = "https://bueistmiugoyjzyewppt.supabase.co";
+  var SUPABASE_KEY = "sb_publishable_uWGnj2RINGiz51GTMaHJ3Q_qobugTJI";
+  var ROW_ID = "ian_y_lu";
+  var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+  /* ---------------- constants ---------------- */
+  var FIN_CATS = ["Comida","Alquiler/Casa","Transporte","Ocio","Ahorro","Salud","Otro"];
+  var CAT_VARS = ["--wine","--moss","--gold","--good","--warn","--bad","--ink-soft"];
+  var EVENT_CATS = {cumple:"Cumpleaños", aniversario:"Aniversario", viaje:"Viaje", otro:"Otro"};
+  var STAGES = [
+    {key:"Prospecto", label:"Prospecto", cls:"neutral"},
+    {key:"Contactado", label:"Contactado", cls:"neutral"},
+    {key:"Interesado", label:"Interesado", cls:"warn"},
+    {key:"Curioso", label:"Curioso", cls:"neutral"},
+    {key:"En negociación", label:"En negociación", cls:"warn"},
+    {key:"Inversor", label:"Inversor", cls:"good"},
+    {key:"Cerrada", label:"Cerrada", cls:"good"},
+    {key:"Interesado caido", label:"Interesado caído", cls:"bad"},
+    {key:"Error de contacto", label:"Error de contacto", cls:"bad"},
+    {key:"No interesado", label:"No interesado", cls:"bad"},
+    {key:"Perdida", label:"Perdida", cls:"bad"}
+  ];
+  var OLD_STAGE_MIGRATION = { nuevo:"Prospecto", contactado:"Contactado", propuesta:"En negociación", cerrado:"Cerrada", perdido:"Perdida" };
+  function stageMeta(key){
+    return STAGES.find(function(s){ return s.key === key; }) || { key:key, label:key||"Prospecto", cls:"neutral" };
+  }
+  var RESPONSABLE_OPTIONS = ["Ian","Ivan","Rocio","Lili"];
+  var NEXT_ACTION_OPTIONS = ["Segundo contacto","Tercer contacto","Cuarto contacto","Seguimiento","Recontactarlo en un futuro","Ofrecer promo","Enviar propuesta","Reunión de cierre","Coordinar meet","Cierre","Consultar si avanza"];
+  var MONTHS = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  var DOWS = ["L","M","M","J","V","S","D"];
+  var ROLE_COLORS = { ian:"#7A3B58", partner:"#4F6B4A" };
+  var ACCOUNT_ROLES = {
+    "ian.castrucci@ianylu.app": "ian",
+    "lucia.quiroga@ianylu.app": "partner"
+  };
+  var ACCENT_THEMES = {
+    classic: { label:"Clásico (vino y musgo)",
+      light:{ wine:"#7A3B58", wineSoft:"#F3E7ED", moss:"#4F6B4A", mossSoft:"#E9EFE5" },
+      dark:{ wine:"#D98FAE", wineSoft:"#3A2530", moss:"#8FB285", mossSoft:"#243024" } },
+    ocean: { label:"Océano",
+      light:{ wine:"#2C6E8E", wineSoft:"#E4EFF3", moss:"#3E8F7A", mossSoft:"#E3F1EC" },
+      dark:{ wine:"#7EC4E0", wineSoft:"#1E3540", moss:"#7FD9C4", mossSoft:"#1C332C" } },
+    sunset: { label:"Atardecer",
+      light:{ wine:"#B8563A", wineSoft:"#F7E9E4", moss:"#B8873A", mossSoft:"#F5EEDD" },
+      dark:{ wine:"#E2A98F", wineSoft:"#3D2A22", moss:"#E0BB6E", mossSoft:"#39301C" } }
+  };
+
+  function applyTheme(){
+    var mode = appState.config.themeMode || "system";
+    if(mode === "system") document.documentElement.removeAttribute("data-theme");
+    else document.documentElement.setAttribute("data-theme", mode);
+
+    var t = ACCENT_THEMES[appState.config.accentTheme] || ACCENT_THEMES.classic;
+    var css = ':root{ --wine:'+t.light.wine+'; --wine-soft:'+t.light.wineSoft+'; --moss:'+t.light.moss+'; --moss-soft:'+t.light.mossSoft+'; }' +
+      '@media (prefers-color-scheme: dark){ :root:not([data-theme="light"]){ --wine:'+t.dark.wine+'; --wine-soft:'+t.dark.wineSoft+'; --moss:'+t.dark.moss+'; --moss-soft:'+t.dark.mossSoft+'; } }' +
+      ':root[data-theme="dark"]{ --wine:'+t.dark.wine+'; --wine-soft:'+t.dark.wineSoft+'; --moss:'+t.dark.moss+'; --moss-soft:'+t.dark.mossSoft+'; }';
+    var el = document.getElementById("accent-style");
+    if(!el){ el = document.createElement("style"); el.id = "accent-style"; document.head.appendChild(el); }
+    if(el.textContent !== css) el.textContent = css;
+  }
+  var DEFAULT_STATE = {
+    config: { names: { ian: "Ian", partner: "Mi pareja" }, currency: "$", sheetCsvUrl: "", finnhubApiKey: "", stockTickers: "", themeMode: "system", accentTheme: "classic", aiApiKey: "", aiModel: "" },
+    sharedTasks: [], financeTx: [], events: [], goals: [], messages: [],
+    personal: { ian: { tasks: [], clients: [] }, partner: { tasks: [], notes: [] } }
+  };
+
+  /* ---------------- state ---------------- */
+  var appState = normalizeState(JSON.parse(JSON.stringify(DEFAULT_STATE)));
+  var syncStatus = "connecting"; // connecting | ok | error
+  var saveTimer = null;
+  var session = null;
+  var appBooted = false;
+  var realtimeChannel = null;
+  var sheetTx = [];
+  var sheetSyncStatus = "idle"; // idle | loading | ok | error
+  var sheetLastSync = null;
+  var marketRates = [];
+  var marketStatus = "idle"; // idle | loading | ok | error
+  var marketLastSync = null;
+  var marketFetched = false;
+  var stockQuotes = {};
+  var stockStatus = "idle"; // idle | loading | ok | error | no-config
+  var stockLastSync = null;
+  var stockFetched = false;
+  var aiInsights = null; // { text, generatedAt }
+  var aiInsightsStatus = "idle"; // idle | loading | ok | error | no-config
+  var aiInsightsFetched = false;
+  var aiChat = []; // [{ role: "user"|"assistant", text }]
+  var aiChatStatus = "idle"; // idle | loading | error
+
+  var state = {
+    role: null,
+    clientSearch: "",
+    clientFilter: "all",
+    editingClientId: null,
+    section: "inicio",
+    lastShared: "tareas",
+    lastPersonal: null,
+    data: { sharedTasks: [], financeTx: [], events: [], goals: [], messages: [], myTasks: [], myClients: [], myNotes: [] },
+    modal: null,
+    modalPrefillDate: null,
+    selectedDay: null
+  };
+
+  function normalizeState(s){
+    s = s || {};
+    s.config = s.config || { names:{ian:"Ian",partner:"Mi pareja"}, currency:"$", sheetCsvUrl:"" };
+    s.config.names = Object.assign({ian:"Ian",partner:"Mi pareja"}, s.config.names||{});
+    s.config.currency = s.config.currency || "$";
+    s.config.sheetCsvUrl = s.config.sheetCsvUrl || "";
+    s.config.finnhubApiKey = s.config.finnhubApiKey || "";
+    s.config.stockTickers = s.config.stockTickers || "";
+    s.config.themeMode = s.config.themeMode || "system";
+    s.config.accentTheme = s.config.accentTheme || "classic";
+    s.config.aiApiKey = s.config.aiApiKey || "";
+    s.config.aiModel = s.config.aiModel || "";
+    s.sharedTasks = s.sharedTasks || [];
+    s.financeTx = s.financeTx || [];
+    s.events = (s.events || []).map(function(e){ e.hora = e.hora || ""; return e; });
+    s.goals = (s.goals || []).map(function(g){
+      g.kind = g.kind || "simple";
+      if(g.kind === "ahorro"){
+        g.targetAmount = g.targetAmount || 0;
+        g.savedAmount = g.savedAmount || 0;
+        g.contributions = g.contributions || [];
+      }
+      return g;
+    });
+    s.messages = s.messages || [];
+    s.personal = s.personal || {};
+    s.personal.ian = s.personal.ian || {};
+    s.personal.ian.tasks = s.personal.ian.tasks || [];
+    s.personal.ian.clients = (s.personal.ian.clients || []).map(function(c){
+      if(OLD_STAGE_MIGRATION[c.stage]) c.stage = OLD_STAGE_MIGRATION[c.stage];
+      c.stage = c.stage || "Prospecto";
+      c.email = c.email || "";
+      c.phone = c.phone || "";
+      c.firstContactDate = c.firstContactDate || null;
+      c.nextAction = c.nextAction || "";
+      c.lastUpdateDate = c.lastUpdateDate || null;
+      c.potentialValue = (c.potentialValue === undefined) ? null : c.potentialValue;
+      c.responsible = c.responsible || "Ian";
+      c.recontactDate = c.recontactDate || null;
+      c.isInvestor = !!c.isInvestor;
+      c.comment = c.comment || c.notes || "";
+      return c;
+    });
+    s.personal.partner = s.personal.partner || {};
+    s.personal.partner.tasks = s.personal.partner.tasks || [];
+    s.personal.partner.notes = s.personal.partner.notes || [];
+    return s;
+  }
+
+  function fmtMoney(n){
+    var c = appState.config.currency || "$";
+    var v = Math.round(n);
+    return c + v.toLocaleString("es-AR");
+  }
+  function fmtDate(iso){
+    if(!iso) return "";
+    var d = new Date(iso + "T00:00:00");
+    return d.toLocaleDateString("es-AR", {day:"numeric", month:"short"});
+  }
+  function fmtDateTime(ts){
+    if(!ts) return "";
+    var d = new Date(ts);
+    return d.toLocaleDateString("es-AR", {day:"numeric", month:"short"}) + " · " + d.toLocaleTimeString("es-AR", {hour:"2-digit", minute:"2-digit"});
+  }
+  function todayISO(){
+    var d = new Date();
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  function uid(){ return Math.random().toString(36).slice(2,10) + Date.now().toString(36); }
+  function escapeHtml(s){
+    return String(s||"").replace(/[&<>"']/g, function(c){
+      return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c];
+    });
+  }
+  function otherRole(r){ return r === "ian" ? "partner" : "ian"; }
+  function roleName(r){ return appState.config.names[r] || (r==="ian"?"Ian":"Mi pareja"); }
+  function roleInitial(r){ return (roleName(r)||"?").trim().charAt(0).toUpperCase(); }
+
+  /* ---------------- data view ---------------- */
+  function syncDataView(){
+    applyTheme();
+    state.data.sharedTasks = appState.sharedTasks;
+    state.data.financeTx = appState.financeTx.concat(sheetTx).sort(function(a,b){
+      return (b.date||"").localeCompare(a.date||"");
+    });
+    state.data.events = appState.events;
+    state.data.goals = appState.goals;
+    state.data.messages = appState.messages;
+    if(state.role){
+      state.data.myTasks = appState.personal[state.role].tasks;
+    }
+    state.data.myClients = appState.personal.ian.clients;
+    state.data.myNotes = appState.personal.partner.notes;
+  }
+
+  function getArray(listKey){
+    if(listKey === "sharedTasks") return appState.sharedTasks;
+    if(listKey === "myTasks") return appState.personal[state.role].tasks;
+    if(listKey === "financeTx") return appState.financeTx;
+    if(listKey === "events") return appState.events;
+    if(listKey === "goals") return appState.goals;
+    if(listKey === "myClients") return appState.personal.ian.clients;
+    if(listKey === "myNotes") return appState.personal.partner.notes;
+    if(listKey === "messages") return appState.messages;
+    return [];
+  }
+
+  /* ---------------- planilla de gastos (Google Sheets) ---------------- */
+  function stripAccents(s){
+    return String(s||"").normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase().trim();
+  }
+
+  function parseCsv(text){
+    var rows = [];
+    var row = [];
+    var field = "";
+    var inQuotes = false;
+    for(var i=0; i<text.length; i++){
+      var c = text[i];
+      if(inQuotes){
+        if(c === '"'){
+          if(text[i+1] === '"'){ field += '"'; i++; }
+          else { inQuotes = false; }
+        } else { field += c; }
+      } else {
+        if(c === '"'){ inQuotes = true; }
+        else if(c === ','){ row.push(field); field = ""; }
+        else if(c === '\n' || c === '\r'){
+          if(c === '\r' && text[i+1] === '\n') i++;
+          row.push(field); field = "";
+          rows.push(row); row = [];
+        } else { field += c; }
+      }
+    }
+    if(field.length || row.length){ row.push(field); rows.push(row); }
+    return rows.filter(function(r){ return r.length > 1 || (r.length===1 && r[0] !== ""); });
+  }
+
+  function parseSheetDate(raw){
+    raw = String(raw||"").trim();
+    if(!raw) return "";
+    var iso = raw.match(/^(\d{4})-(\d{1,2})-(\d{1,2})/);
+    if(iso) return iso[1]+"-"+iso[2].padStart(2,"0")+"-"+iso[3].padStart(2,"0");
+    var dmy = raw.match(/^(\d{1,2})[\/\-](\d{1,2})[\/\-](\d{2,4})/);
+    if(dmy){
+      var y = dmy[3].length===2 ? "20"+dmy[3] : dmy[3];
+      return y+"-"+dmy[2].padStart(2,"0")+"-"+dmy[1].padStart(2,"0");
+    }
+    return "";
+  }
+
+  function parseSheetAmount(raw){
+    var s = String(raw||"").trim();
+    if(!s) return NaN;
+    var neg = /^-/.test(s) || /^\(.*\)$/.test(s);
+    s = s.replace(/[^0-9.,-]/g,"");
+    if(s.indexOf(",") !== -1 && s.indexOf(".") !== -1){
+      s = s.lastIndexOf(",") > s.lastIndexOf(".") ? s.replace(/\./g,"").replace(",",".") : s.replace(/,/g,"");
+    } else if(s.indexOf(",") !== -1){
+      s = s.replace(",", ".");
+    }
+    var n = parseFloat(s);
+    if(isNaN(n)) return NaN;
+    return neg ? -Math.abs(n) : n;
+  }
+
+  function rowsToTx(rows){
+    if(!rows.length) return [];
+    var header = rows[0].map(stripAccents);
+    var idx = {
+      fecha: header.findIndex(function(h){ return /^(fecha|date)$/.test(h); }),
+      desc: header.findIndex(function(h){ return /^(descripcion|desc|concepto|description)$/.test(h); }),
+      categoria: header.findIndex(function(h){ return /^(categoria|category|rubro)$/.test(h); }),
+      tipo: header.findIndex(function(h){ return /^(tipo|type)$/.test(h); }),
+      monto: header.findIndex(function(h){ return /^(monto|amount|importe|total)$/.test(h); })
+    };
+    if(idx.monto === -1 || idx.fecha === -1) return [];
+    var out = [];
+    for(var i=1; i<rows.length; i++){
+      var r = rows[i];
+      var date = parseSheetDate(r[idx.fecha]);
+      var amountRaw = parseSheetAmount(r[idx.monto]);
+      if(!date || isNaN(amountRaw) || amountRaw === 0) continue;
+      var tipoRaw = idx.tipo !== -1 ? stripAccents(r[idx.tipo]) : "";
+      var type = /ingreso|income/.test(tipoRaw) ? "ingreso" : (/gasto|expense/.test(tipoRaw) ? "gasto" : (amountRaw < 0 ? "gasto" : "ingreso"));
+      out.push({
+        id: "sheet-" + i + "-" + date + "-" + Math.round(Math.abs(amountRaw)*100),
+        desc: (idx.desc !== -1 ? r[idx.desc] : "") || "Movimiento de planilla",
+        amount: Math.abs(amountRaw),
+        type: type,
+        category: (idx.categoria !== -1 ? r[idx.categoria] : "") || "Otro",
+        date: date,
+        source: "sheet"
+      });
+    }
+    return out;
+  }
+
+  async function fetchSheetTx(){
+    var url = appState.config.sheetCsvUrl;
+    if(!url){ sheetTx = []; sheetSyncStatus = "idle"; syncDataView(); render(); return; }
+    sheetSyncStatus = "loading";
+    render();
+    try{
+      var res = await fetch(url, { cache: "no-store" });
+      if(!res.ok) throw new Error("bad status");
+      var text = await res.text();
+      sheetTx = rowsToTx(parseCsv(text));
+      sheetSyncStatus = "ok";
+      sheetLastSync = new Date();
+    }catch(e){
+      sheetSyncStatus = "error";
+    }
+    syncDataView();
+    render();
+  }
+
+  /* ---------------- cotizaciones del dólar (dolarapi.com, gratis, sin clave) ---------------- */
+  var DOLAR_LABELS = { oficial:"Oficial", blue:"Blue", bolsa:"MEP", contadoconliqui:"CCL", tarjeta:"Tarjeta", cripto:"Cripto", mayorista:"Mayorista" };
+  var DOLAR_ORDER = ["oficial","blue","bolsa","contadoconliqui","tarjeta","cripto","mayorista"];
+
+  async function fetchMarketRates(){
+    marketStatus = "loading";
+    render();
+    try{
+      var res = await fetch("https://dolarapi.com/v1/dolares", { cache: "no-store" });
+      if(!res.ok) throw new Error("bad status");
+      var data = await res.json();
+      marketRates = Array.isArray(data) ? data : [];
+      marketStatus = "ok";
+      marketLastSync = new Date();
+    }catch(e){
+      marketStatus = "error";
+    }
+    marketFetched = true;
+    render();
+  }
+
+  /* ---------------- acciones puntuales (Finnhub, requiere clave gratuita) ---------------- */
+  function tickerList(){
+    return (appState.config.stockTickers || "").split(",").map(function(t){ return t.trim().toUpperCase(); }).filter(Boolean);
+  }
+
+  async function fetchStockQuotes(){
+    var apiKey = appState.config.finnhubApiKey;
+    var tickers = tickerList();
+    if(!apiKey || !tickers.length){ stockStatus = "no-config"; stockFetched = true; render(); return; }
+    stockStatus = "loading";
+    render();
+    try{
+      var results = await Promise.all(tickers.map(async function(sym){
+        var res = await fetch("https://finnhub.io/api/v1/quote?symbol=" + encodeURIComponent(sym) + "&token=" + encodeURIComponent(apiKey));
+        if(!res.ok) throw new Error("bad status");
+        var q = await res.json();
+        return { sym: sym, q: q };
+      }));
+      var next = {};
+      results.forEach(function(r){ next[r.sym] = r.q; });
+      stockQuotes = next;
+      stockStatus = "ok";
+      stockLastSync = new Date();
+    }catch(e){
+      stockStatus = "error";
+    }
+    stockFetched = true;
+    render();
+  }
+
+  /* ---------------- Asistente con IA (Claude API) ---------------- */
+  function buildAssistantContextSummary(){
+    var now = new Date();
+    var monthKey = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+    var income=0, expense=0;
+    state.data.financeTx.forEach(function(t){
+      if((t.date||"").slice(0,7)===monthKey){
+        if(t.type==="ingreso") income+=Number(t.amount||0); else expense+=Number(t.amount||0);
+      }
+    });
+    var pendingShared = state.data.sharedTasks.filter(function(t){return !t.done;});
+    var upcomingEvents = state.data.events.filter(function(e){return e.date>=todayISO();})
+      .sort(function(a,b){return a.date.localeCompare(b.date);}).slice(0,6);
+    var goalsSummary = state.data.goals.map(function(g){
+      if(g.kind === "ahorro") return { titulo:g.title, tipo:"ahorro", ahorrado:g.savedAmount, objetivo:g.targetAmount, estado:g.status };
+      return { titulo:g.title, tipo:"simple", progreso:g.progress+"%", estado:g.status };
+    });
+    return JSON.stringify({
+      hoy: todayISO(),
+      balance_del_mes: { ingresos: income, gastos: expense, balance: income-expense, moneda: appState.config.currency },
+      tareas_compartidas_pendientes: pendingShared.map(function(t){ return { titulo:t.title, vence:t.dueDate||null }; }),
+      proximos_eventos: upcomingEvents.map(function(e){ return { titulo:e.title, fecha:e.date, hora:e.hora||null }; }),
+      metas: goalsSummary,
+      mensajes_dejados_en_la_app: state.data.messages.length
+    });
+  }
+  async function callClaude(apiKey, model, systemPrompt, messages){
+    var res = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+        "x-api-key": apiKey,
+        "anthropic-version": "2023-06-01",
+        "anthropic-dangerous-direct-browser-access": "true"
+      },
+      body: JSON.stringify({ model: model, max_tokens: 600, system: systemPrompt, messages: messages })
+    });
+    if(!res.ok){
+      var errText = "";
+      try{ errText = (await res.json()).error.message; }catch(e){}
+      throw new Error(errText || ("HTTP " + res.status));
+    }
+    var data = await res.json();
+    var text = (data.content || []).map(function(b){ return b.text || ""; }).join("\n").trim();
+    return text || "(sin respuesta)";
+  }
+  var ASSISTANT_SYSTEM = "Sos el asistente de 'Ian y Lu', una app privada donde una pareja organiza tareas, finanzas, calendario y metas compartidas. " +
+    "Te paso un resumen JSON de su información real. Respondé siempre en español rioplatense, corto y concreto, sin markdown pesado (podés usar guiones simples). " +
+    "Basate solo en los datos que te paso — si algo no está en los datos, decilo en vez de inventar.";
+  async function fetchAiInsights(){
+    var apiKey = appState.config.aiApiKey, model = appState.config.aiModel;
+    if(!apiKey || !model){ aiInsightsStatus = "no-config"; aiInsightsFetched = true; render(); return; }
+    aiInsightsStatus = "loading";
+    render();
+    try{
+      var ctx = buildAssistantContextSummary();
+      var text = await callClaude(apiKey, model, ASSISTANT_SYSTEM,
+        [{ role:"user", content:"Dame 3 observaciones o sugerencias cortas y concretas en base a estos datos (una por línea, con un guion adelante):\n\n"+ctx }]);
+      aiInsights = { text: text, generatedAt: Date.now() };
+      aiInsightsStatus = "ok";
+    }catch(e){
+      aiInsights = { text: e.message || "Error desconocido" };
+      aiInsightsStatus = "error";
+    }
+    aiInsightsFetched = true;
+    render();
+  }
+  function sendAiChat(text){
+    if(!text || !text.trim()) return;
+    var apiKey = appState.config.aiApiKey, model = appState.config.aiModel;
+    if(!apiKey || !model) return;
+    aiChat.push({ role:"user", text: text.trim() });
+    aiChatStatus = "loading";
+    render();
+    var ctx = buildAssistantContextSummary();
+    var history = aiChat.slice(-8).map(function(m,i,arr){
+      return { role: m.role, content: (i === arr.length-1) ? ("Datos actuales:\n"+ctx+"\n\nPregunta: "+m.text) : m.text };
+    });
+    callClaude(apiKey, model, ASSISTANT_SYSTEM, history).then(function(reply){
+      aiChat.push({ role:"assistant", text: reply });
+      aiChatStatus = "ok";
+      render();
+    }).catch(function(e){
+      aiChat.push({ role:"assistant", text: "No pude conectar con la IA (" + (e.message||"error") + "). Revisá tu clave y el nombre del modelo en Configuración." });
+      aiChatStatus = "error";
+      render();
+    });
+  }
+
+  /* ---------------- Supabase load / realtime / save ---------------- */
+  async function loadInitial(){
+    try{
+      var res = await supabase.from("app_state").select("data").eq("id", ROW_ID).single();
+      if(res.error || !res.data){
+        syncStatus = "error";
+      } else {
+        appState = normalizeState(res.data.data || {});
+        syncStatus = "ok";
+      }
+    }catch(e){
+      syncStatus = "error";
+    }
+    syncDataView();
+    render();
+    subscribeRealtime();
+    if(appState.config.sheetCsvUrl) fetchSheetTx();
+  }
+
+  function subscribeRealtime(){
+    try{
+      realtimeChannel = supabase.channel("app_state_sync")
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "app_state", filter: "id=eq." + ROW_ID }, function(payload){
+          appState = normalizeState((payload.new && payload.new.data) || {});
+          syncDataView();
+          render();
+        })
+        .subscribe(function(status){
+          if(status === "CHANNEL_ERROR" || status === "TIMED_OUT"){
+            if(syncStatus === "ok"){ syncStatus = "error"; render(); }
+          }
+        });
+    }catch(e){ /* realtime optional; polling fallback not implemented, writes still work */ }
+  }
+
+  function persist(){
+    syncDataView();
+    render();
+    clearTimeout(saveTimer);
+    saveTimer = setTimeout(doSave, 200);
+  }
+
+  async function doSave(){
+    try{
+      var res = await supabase.from("app_state")
+        .update({ data: appState, updated_at: new Date().toISOString() })
+        .eq("id", ROW_ID);
+      if(res.error){
+        syncStatus = "error";
+      } else if(syncStatus !== "ok"){
+        syncStatus = "ok";
+      }
+    }catch(e){
+      syncStatus = "error";
+    }
+    render();
+  }
+
+  function applyRoleFromSession(sess){
+    var email = ((sess && sess.user && sess.user.email) || "").toLowerCase().trim();
+    state.role = ACCOUNT_ROLES[email] || null;
+    state.lastPersonal = "mis-tareas";
+    syncDataView();
+  }
+
+  /* ---------------- mutations ---------------- */
+  function addSharedTask(title, dueDate){
+    if(!title) return;
+    appState.sharedTasks.push({ id: uid(), title: title, done:false, dueDate: dueDate||null, createdBy: state.role, createdAt: Date.now() });
+    persist();
+  }
+  function addMyTask(title, dueDate){
+    if(!title) return;
+    appState.personal[state.role].tasks.push({ id: uid(), title:title, done:false, dueDate:dueDate||null, createdAt:Date.now() });
+    persist();
+  }
+  function toggleTask(listKey, id){
+    var arr = getArray(listKey);
+    var item = arr.find(function(x){ return x.id === id; });
+    if(item){ item.done = !item.done; persist(); }
+  }
+  function deleteItem(listKey, id){
+    var arr = getArray(listKey);
+    var idx = arr.findIndex(function(x){ return x.id === id; });
+    if(idx !== -1){ arr.splice(idx,1); persist(); }
+  }
+  function addTx(desc, amount, type, category, date){
+    if(!desc || !amount) return;
+    appState.financeTx.unshift({ id: uid(), desc:desc, amount: Math.abs(Number(amount)), type:type, category:category, date: date||todayISO(), addedBy: state.role });
+    persist();
+  }
+  function addEvent(title, date, category, notes, hora){
+    if(!title || !date) return;
+    appState.events.push({ id: uid(), title:title, date:date, category:category, notes:notes||"", hora: hora||"" });
+    appState.events.sort(function(a,b){ return (a.date||"").localeCompare(b.date||""); });
+    persist();
+  }
+  function addGoal(title, description, targetDate, kind, targetAmount){
+    if(!title) return;
+    var isAhorro = kind === "ahorro";
+    appState.goals.unshift({
+      id: uid(), title:title, description:description||"", progress:0, status:"activa",
+      targetDate: targetDate||null, createdAt: Date.now(),
+      kind: isAhorro ? "ahorro" : "simple",
+      targetAmount: isAhorro ? (Number(targetAmount)||0) : null,
+      savedAmount: isAhorro ? 0 : null,
+      contributions: isAhorro ? [] : []
+    });
+    persist();
+  }
+  function setGoalProgress(id, val){
+    var item = appState.goals.find(function(x){ return x.id === id; });
+    if(!item) return;
+    var v = Number(val);
+    item.progress = v;
+    item.status = v >= 100 ? "lograda" : (item.status === "pausada" ? "pausada" : "activa");
+    persist();
+  }
+  function addGoalContribution(goalId, amount){
+    var g = appState.goals.find(function(x){ return x.id === goalId; });
+    if(!g || g.kind !== "ahorro") return;
+    var amt = Number(amount);
+    if(!amt) return;
+    g.contributions = g.contributions || [];
+    g.contributions.push({ id: uid(), month: todayISO().slice(0,7), amount: amt, date: todayISO(), by: state.role });
+    g.savedAmount = (g.savedAmount||0) + amt;
+    g.progress = g.targetAmount ? Math.min(100, Math.round(g.savedAmount / g.targetAmount * 100)) : g.progress;
+    if(g.progress >= 100) g.status = "lograda";
+    persist();
+  }
+  function addMessage(text){
+    if(!text || !text.trim()) return;
+    appState.messages.unshift({ id: uid(), text: text.trim(), from: state.role, date: Date.now() });
+    persist();
+  }
+  function clientFieldsFromForm(f){
+    return {
+      name: (f.name||"").trim(),
+      email: (f.email||"").trim(),
+      phone: (f.phone||"").trim(),
+      stage: f.stage || "Prospecto",
+      firstContactDate: f.firstContactDate || null,
+      nextAction: (f.nextAction||"").trim(),
+      lastUpdateDate: f.lastUpdateDate || null,
+      potentialValue: (f.potentialValue === "" || f.potentialValue === null || f.potentialValue === undefined) ? null : Number(f.potentialValue),
+      responsible: (f.responsible||"").trim() || "Ian",
+      recontactDate: f.recontactDate || null,
+      isInvestor: !!f.isInvestor,
+      comment: (f.comment||"").trim()
+    };
+  }
+  function addClient(fields){
+    var c = clientFieldsFromForm(fields);
+    if(!c.name) return;
+    c.id = uid();
+    c.createdAt = Date.now();
+    appState.personal.ian.clients.unshift(c);
+    persist();
+  }
+  function updateClient(id, fields){
+    var item = appState.personal.ian.clients.find(function(x){ return x.id === id; });
+    if(!item) return;
+    Object.assign(item, clientFieldsFromForm(fields));
+    persist();
+  }
+  function setClientStage(id, stage){
+    var item = appState.personal.ian.clients.find(function(x){ return x.id === id; });
+    if(item){ item.stage = stage; persist(); }
+  }
+
+  /* ---------------- CRM Excel/CSV import ---------------- */
+  var clientImportMsg = null;
+  function normalizeHeader(h){
+    return stripAccents(h);
+  }
+  function findCol(headerRow, matchFn){
+    for(var i=0;i<headerRow.length;i++){ if(matchFn(normalizeHeader(headerRow[i]))) return i; }
+    return -1;
+  }
+  function excelDateToISO(val){
+    if(!val) return null;
+    var d = (val instanceof Date) ? val : new Date(val);
+    if(isNaN(d.getTime())) return null;
+    return d.getFullYear() + "-" + String(d.getMonth()+1).padStart(2,"0") + "-" + String(d.getDate()).padStart(2,"0");
+  }
+  function normalizeStageFromImport(raw){
+    var v = String(raw||"").trim();
+    if(!v) return "Prospecto";
+    var found = STAGES.find(function(s){ return s.key.toLowerCase() === v.toLowerCase(); });
+    return found ? found.key : v;
+  }
+  function parseClientsWorkbook(workbook){
+    var out = [];
+    workbook.SheetNames.forEach(function(sheetName){
+      var ws = workbook.Sheets[sheetName];
+      if(!ws) return;
+      var rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:null, raw:true });
+      var headerIdx = -1, headerRow = null;
+      for(var i=0;i<Math.min(rows.length,15);i++){
+        var idx = findCol(rows[i]||[], function(h){ return h.indexOf("nombre") !== -1; });
+        if(idx !== -1){ headerIdx = i; headerRow = rows[i]; break; }
+      }
+      if(headerIdx === -1) return;
+      var col = {
+        name: findCol(headerRow, function(h){ return h.indexOf("nombre") !== -1; }),
+        email: findCol(headerRow, function(h){ return h.indexOf("correo") !== -1 || h.indexOf("email") !== -1; }),
+        phone: findCol(headerRow, function(h){ return h.indexOf("tel") !== -1; }),
+        stage: findCol(headerRow, function(h){ return h.indexOf("estado") !== -1; }),
+        firstContactDate: findCol(headerRow, function(h){ return h.indexOf("primer contacto") !== -1; }),
+        nextAction: findCol(headerRow, function(h){ return h.indexOf("proxima") !== -1 || h.indexOf("accion") !== -1; }),
+        lastUpdateDate: findCol(headerRow, function(h){ return h.indexOf("actualizacion") !== -1 || h.indexOf("actualizaci") !== -1; }),
+        potentialValue: findCol(headerRow, function(h){ return h.indexOf("valor") !== -1; }),
+        responsible: findCol(headerRow, function(h){ return h.indexOf("responsable") !== -1; }),
+        recontactDate: findCol(headerRow, function(h){ return h.indexOf("recontacto") !== -1 && h.indexOf("dias") === -1; }),
+        isInvestor: findCol(headerRow, function(h){ return h.indexOf("invers") !== -1; }),
+        comment: findCol(headerRow, function(h){ return h.indexOf("coment") !== -1; })
+      };
+      for(var r=headerIdx+1; r<rows.length; r++){
+        var row = rows[r];
+        if(!row) continue;
+        var name = col.name !== -1 ? row[col.name] : null;
+        if(!name || !String(name).trim()) continue;
+        out.push({
+          name: String(name).trim(),
+          email: col.email !== -1 && row[col.email] ? String(row[col.email]).trim() : "",
+          phone: col.phone !== -1 && row[col.phone] ? String(row[col.phone]).trim() : "",
+          stage: normalizeStageFromImport(col.stage !== -1 ? row[col.stage] : ""),
+          firstContactDate: col.firstContactDate !== -1 ? excelDateToISO(row[col.firstContactDate]) : null,
+          nextAction: col.nextAction !== -1 && row[col.nextAction] ? String(row[col.nextAction]).trim() : "",
+          lastUpdateDate: col.lastUpdateDate !== -1 ? excelDateToISO(row[col.lastUpdateDate]) : null,
+          potentialValue: col.potentialValue !== -1 && row[col.potentialValue] !== null && row[col.potentialValue] !== "" ? Number(row[col.potentialValue]) : null,
+          responsible: col.responsible !== -1 && row[col.responsible] ? String(row[col.responsible]).trim() : "Ian",
+          recontactDate: col.recontactDate !== -1 ? excelDateToISO(row[col.recontactDate]) : null,
+          isInvestor: col.isInvestor !== -1 ? /^s/i.test(String(row[col.isInvestor]||"").trim()) : false,
+          comment: col.comment !== -1 && row[col.comment] ? String(row[col.comment]).trim() : ""
+        });
+      }
+    });
+    return out;
+  }
+  function mergeImportedClients(list){
+    var clients = appState.personal.ian.clients;
+    var added = 0, updated = 0;
+    list.forEach(function(rec){
+      var key = rec.email ? rec.email.toLowerCase() : null;
+      var existing = clients.find(function(c){
+        if(key && c.email) return c.email.toLowerCase() === key;
+        return !c.email && !rec.email && c.name.trim().toLowerCase() === rec.name.trim().toLowerCase();
+      });
+      if(existing){
+        Object.assign(existing, rec);
+        updated++;
+      } else {
+        rec.id = uid();
+        rec.createdAt = Date.now();
+        clients.unshift(rec);
+        added++;
+      }
+    });
+    persist();
+    return { added: added, updated: updated };
+  }
+  async function handleClientImportFile(file){
+    if(!file || typeof XLSX === "undefined") return;
+    try{
+      var buf = await file.arrayBuffer();
+      var wb = XLSX.read(buf, { type:"array", cellDates:true });
+      var list = parseClientsWorkbook(wb);
+      if(!list.length){
+        clientImportMsg = { ok:false, text:"No encontré filas con nombre de cliente en el archivo." };
+      } else {
+        var res = mergeImportedClients(list);
+        clientImportMsg = { ok:true, text:"Se importaron "+res.added+" clientes nuevos y se actualizaron "+res.updated+" existentes." };
+      }
+    }catch(e){
+      clientImportMsg = { ok:false, text:"No se pudo leer el archivo. Probá con el Excel original sin editar." };
+    }
+    render();
+  }
+  function addNote(title, body){
+    if(!title) return;
+    appState.personal.partner.notes.unshift({ id: uid(), title:title, body:body||"", updatedAt: Date.now() });
+    persist();
+  }
+  function saveConfig(names, currency, sheetCsvUrl, finnhubApiKey, stockTickers, themeMode, accentTheme, aiApiKey, aiModel){
+    var urlChanged = sheetCsvUrl !== appState.config.sheetCsvUrl;
+    var stocksChanged = finnhubApiKey !== appState.config.finnhubApiKey || stockTickers !== appState.config.stockTickers;
+    var aiChanged = aiApiKey !== appState.config.aiApiKey || aiModel !== appState.config.aiModel;
+    appState.config.names = names;
+    appState.config.currency = currency;
+    appState.config.sheetCsvUrl = sheetCsvUrl || "";
+    appState.config.finnhubApiKey = finnhubApiKey || "";
+    appState.config.stockTickers = stockTickers || "";
+    appState.config.themeMode = themeMode || "system";
+    appState.config.accentTheme = accentTheme || "classic";
+    appState.config.aiApiKey = aiApiKey || "";
+    appState.config.aiModel = aiModel || "";
+    persist();
+    if(urlChanged) fetchSheetTx();
+    if(stocksChanged){ stockFetched = false; fetchStockQuotes(); }
+    if(aiChanged){ aiInsightsFetched = false; aiInsights = null; aiChat = []; if(appState.config.aiApiKey && appState.config.aiModel) fetchAiInsights(); }
+  }
+
+  /* ---------------- render helpers ---------------- */
+  function dueClass(dueDate, done){
+    if(done || !dueDate) return "neutral";
+    if(dueDate < todayISO()) return "bad";
+    if(dueDate === todayISO()) return "warn";
+    return "neutral";
+  }
+  function dueLabel(dueDate, done){
+    if(!dueDate) return null;
+    if(done) return fmtDate(dueDate);
+    if(dueDate < todayISO()) return "Venció " + fmtDate(dueDate);
+    if(dueDate === todayISO()) return "Hoy";
+    return fmtDate(dueDate);
+  }
+
+  function taskRow(item, listKey){
+    var due = dueLabel(item.dueDate, item.done);
+    var creator = item.createdBy;
+    return (
+      '<div class="row">' +
+        '<button class="check ' + (item.done?'on':'') + '" onclick="NV.toggleTask(\''+listKey+'\',\''+item.id+'\')">' + (item.done?'✓':'') + '</button>' +
+        '<div class="row-body">' +
+          '<div class="row-title ' + (item.done?'done':'') + '">' + escapeHtml(item.title) + '</div>' +
+          '<div class="row-meta">' +
+            (due ? '<span class="pill ' + dueClass(item.dueDate,item.done) + '">' + due + '</span>' : '') +
+            (creator ? '<span class="avatar" style="background:'+ROLE_COLORS[creator]+'" title="'+escapeHtml(roleName(creator))+'">'+roleInitial(creator)+'</span>' : '') +
+          '</div>' +
+        '</div>' +
+        '<div class="row-actions"><button class="icon-btn" onclick="NV.deleteItem(\''+listKey+'\',\''+item.id+'\')">✕</button></div>' +
+      '</div>'
+    );
+  }
+
+  window.NV = {
+    doLogin: function(ev){ doLogin(ev); },
+    logout: function(){ supabase.auth.signOut(); },
+    toggleTask: function(listKey, id){ toggleTask(listKey, id); },
+    deleteItem: function(listKey, id){ deleteItem(listKey, id); },
+    setGoalProgress: function(id, val){ setGoalProgress(id, val); },
+    setClientStage: function(id, stage){ setClientStage(id, stage); },
+    setSection: function(s){
+      state.section = s;
+      var nav = navItems();
+      if(nav.shared.indexOf(s) !== -1) state.lastShared = s;
+      if(nav.personal.indexOf(s) !== -1) state.lastPersonal = s;
+      render();
+      if(s === "finanzas"){
+        if(appState.config.sheetCsvUrl) fetchSheetTx();
+        if(!marketFetched) fetchMarketRates();
+        if(!stockFetched) fetchStockQuotes();
+      }
+      if(s === "asistente" && !aiInsightsFetched && appState.config.aiApiKey && appState.config.aiModel){
+        fetchAiInsights();
+      }
+    },
+    syncSheet: function(){ fetchSheetTx(); },
+    syncMarket: function(){ fetchMarketRates(); },
+    syncStocks: function(){ fetchStockQuotes(); },
+    goGroup: function(g){
+      if(g === "inicio"){ NV.setSection("inicio"); return; }
+      if(g === "shared"){ NV.setSection(state.lastShared || "tareas"); return; }
+      var nav = navItems();
+      NV.setSection(state.lastPersonal && nav.personal.indexOf(state.lastPersonal)!==-1 ? state.lastPersonal : nav.personal[0]);
+    },
+    openModal: function(name, prefillDate){ state.modal = name; state.modalPrefillDate = prefillDate || null; if(name !== "client") state.editingClientId = null; render(); },
+    openDay: function(dateStr){ state.modal = "day"; state.selectedDay = dateStr; render(); },
+    closeModal: function(){ state.modal = null; state.editingClientId = null; render(); },
+    editClient: function(id){ state.editingClientId = id; state.modal = "client"; render(); },
+    setClientSearch: function(v){ state.clientSearch = v; render(); },
+    setClientFilter: function(v){ state.clientFilter = v; render(); },
+    importClientFile: function(input){
+      var file = input.files && input.files[0];
+      input.value = "";
+      if(file) handleClientImportFile(file);
+    },
+    refreshAiInsights: function(){ fetchAiInsights(); },
+    submitAiChat: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      var v = f.text.value;
+      f.reset();
+      sendAiChat(v);
+    },
+    submitTask: function(ev, listKey){
+      ev.preventDefault();
+      var f = ev.target;
+      var title = f.title.value.trim();
+      var due = f.dueDate.value;
+      if(listKey === "shared") addSharedTask(title, due); else addMyTask(title, due);
+      f.reset(); state.modal = null; render();
+    },
+    submitTx: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      addTx(f.desc.value.trim(), f.amount.value, f.type.value, f.category.value, f.date.value || todayISO());
+      f.reset(); state.modal = null; render();
+    },
+    submitEvent: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      addEvent(f.title.value.trim(), f.date.value, f.category.value, f.notes.value.trim(), f.hora.value);
+      f.reset(); state.modal = null; render();
+    },
+    submitGoal: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      addGoal(f.title.value.trim(), f.description.value.trim(), f.targetDate.value, f.kind.value, f.targetAmount.value);
+      f.reset(); state.modal = null; render();
+    },
+    submitGoalContribution: function(ev, goalId){
+      ev.preventDefault();
+      var f = ev.target;
+      addGoalContribution(goalId, f.amount.value);
+      f.reset();
+    },
+    submitClient: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      var fields = {
+        name: f.name.value, email: f.email.value, phone: f.phone.value, stage: f.stage.value,
+        firstContactDate: f.firstContactDate.value, nextAction: f.nextAction.value,
+        lastUpdateDate: f.lastUpdateDate.value, potentialValue: f.potentialValue.value,
+        responsible: f.responsible.value, recontactDate: f.recontactDate.value,
+        isInvestor: f.isInvestor.checked, comment: f.comment.value
+      };
+      if(state.editingClientId) updateClient(state.editingClientId, fields); else addClient(fields);
+      f.reset(); state.modal = null; state.editingClientId = null; render();
+    },
+    submitNote: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      addNote(f.title.value.trim(), f.body.value.trim());
+      f.reset(); state.modal = null; render();
+    },
+    submitConfig: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      saveConfig({ian: f.ianName.value.trim()||"Ian", partner: f.partnerName.value.trim()||"Mi pareja"}, f.currency.value.trim()||"$", f.sheetCsvUrl.value.trim(), f.finnhubApiKey.value.trim(), f.stockTickers.value.trim(), f.themeMode.value, f.accentTheme.value, f.aiApiKey.value.trim(), f.aiModel.value.trim());
+      state.modal = null; render();
+    },
+    submitMessage: function(ev){
+      ev.preventDefault();
+      var f = ev.target;
+      addMessage(f.text.value);
+      f.reset(); state.modal = null; render();
+    }
+  };
+
+  /* ---------------- sections ---------------- */
+  function sectionInicio(){
+    var pend = state.data.sharedTasks.filter(function(t){return !t.done;}).length;
+    var now = new Date();
+    var monthKey = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+    var income=0, expense=0;
+    state.data.financeTx.forEach(function(t){
+      if((t.date||"").slice(0,7)===monthKey){
+        if(t.type==="ingreso") income+=Number(t.amount||0); else expense+=Number(t.amount||0);
+      }
+    });
+    var balance = income-expense;
+    var nextEvent = state.data.events.filter(function(e){return e.date>=todayISO();}).sort(function(a,b){return a.date.localeCompare(b.date);})[0];
+    var activeGoals = state.data.goals.filter(function(g){return g.status==="activa";}).length;
+    var upcoming = state.data.sharedTasks.filter(function(t){return !t.done;}).slice(0,5);
+    var dueSoon = dueSoonItems();
+    var hasOverdue = dueSoon.some(function(t){ return t.dueDate < todayISO(); });
+
+    var reminderCard = dueSoon.length ? (
+      '<div class="card reminder-card'+(hasOverdue?' has-overdue':'')+'"><h2>'+(hasOverdue?'⚠ Vencidas o de hoy':'◷ Para hoy')+'</h2><div class="list">' +
+        dueSoon.map(function(t){ return taskRow(t, t._scope); }).join("") +
+      '</div></div>'
+    ) : "";
+
+    var heroLine = pend > 0
+      ? (pend===1 ? "Tenés 1 tarea compartida pendiente." : "Tenés "+pend+" tareas compartidas pendientes.")
+      : "No tenés tareas compartidas pendientes. ✨";
+
+    return (
+      '<div class="hero">' +
+        '<div class="hero-blob b1"></div><div class="hero-blob b2"></div>' +
+        '<div class="hero-content">' +
+          '<div class="hero-date">'+now.toLocaleDateString("es-AR",{weekday:"long", day:"numeric", month:"long"})+'</div>' +
+          '<h1>Hola, '+escapeHtml(roleName(state.role))+'</h1>' +
+          '<div class="hero-sub">'+heroLine+'</div>' +
+        '</div>' +
+      '</div>' +
+      '<div class="grid-tiles">' +
+        '<div class="tile tile-accent"><div class="tile-ico" style="background:var(--moss-soft);color:var(--moss)">'+SECTION_ICON.tareas+'</div><div><div class="tile-label">Tareas pendientes</div><div class="tile-value">'+pend+'</div></div></div>' +
+        '<div class="tile tile-accent"><div class="tile-ico" style="background:'+(balance>=0?'var(--good-soft)':'var(--bad-soft)')+';color:'+(balance>=0?'var(--good)':'var(--bad)')+'">'+SECTION_ICON.finanzas+'</div><div><div class="tile-label">Balance del mes</div><div class="tile-value '+(balance>=0?'good':'bad')+'">'+fmtMoney(balance)+'</div></div></div>' +
+        '<div class="tile tile-accent"><div class="tile-ico" style="background:var(--warn-soft);color:var(--warn)">'+SECTION_ICON.calendario+'</div><div><div class="tile-label">Próximo evento</div><div class="tile-value" style="font-size:16px">'+(nextEvent?escapeHtml(nextEvent.title)+' · '+fmtDate(nextEvent.date):'—')+'</div></div></div>' +
+        '<div class="tile tile-accent"><div class="tile-ico" style="background:var(--wine-soft);color:var(--wine)">'+SECTION_ICON.metas+'</div><div><div class="tile-label">Metas activas</div><div class="tile-value">'+activeGoals+'</div></div></div>' +
+      '</div>' +
+      reminderCard +
+      '<div class="card"><h2>Pendientes compartidos</h2><div class="list">' +
+        (upcoming.length ? upcoming.map(function(t){return taskRow(t,"sharedTasks");}).join("") : '<div class="empty">Sin tareas pendientes. Buen trabajo.</div>') +
+      '</div></div>'
+    );
+  }
+
+  function sectionSharedTasks(){
+    var pend = state.data.sharedTasks.filter(function(t){return !t.done;});
+    var done = state.data.sharedTasks.filter(function(t){return t.done;});
+    return (
+      '<div class="section-head"><div><h1>Tareas <span class="tag-shared">Compartido</span></h1><div class="section-sub">Cosas por hacer entre los dos.</div></div>' +
+      '<button class="btn primary" onclick="NV.openModal(\'task-shared\')">+ Nueva tarea</button></div>' +
+      '<div class="card"><h2>Pendientes ('+pend.length+')</h2><div class="list">' +
+        (pend.length ? pend.map(function(t){return taskRow(t,"sharedTasks");}).join("") : '<div class="empty">Nada pendiente.</div>') +
+      '</div></div>' +
+      (done.length ? '<div class="card"><h2>Hechas</h2><div class="list">'+done.map(function(t){return taskRow(t,"sharedTasks");}).join("")+'</div></div>' : "")
+    );
+  }
+
+  function expenseDonutSvg(byCat, cats, total){
+    if(!total || !cats.length) return "";
+    var r = 52, cx = 60, cy = 60, circ = 2 * Math.PI * r;
+    var offset = 0;
+    var segs = cats.map(function(c){
+      var v = byCat[c];
+      var frac = v / total;
+      var dash = frac * circ;
+      var colorIdx = FIN_CATS.indexOf(c);
+      if(colorIdx < 0) colorIdx = 0;
+      var s = '<circle cx="'+cx+'" cy="'+cy+'" r="'+r+'" fill="none" stroke="var('+CAT_VARS[colorIdx % CAT_VARS.length]+')" ' +
+        'stroke-width="16" stroke-dasharray="'+dash.toFixed(2)+' '+(circ - dash).toFixed(2)+'" ' +
+        'stroke-dashoffset="'+(-offset).toFixed(2)+'" transform="rotate(-90 '+cx+' '+cy+')"></circle>';
+      offset += dash;
+      return s;
+    }).join("");
+    return '<svg viewBox="0 0 120 120" class="donut" width="140" height="140">' + segs +
+      '<text x="60" y="56" text-anchor="middle" fill="var(--ink)" font-family="IBM Plex Mono, monospace" font-size="12">' + fmtMoney(total) + '</text>' +
+      '<text x="60" y="72" text-anchor="middle" fill="var(--ink-soft)" font-size="9">este mes</text>' +
+      '</svg>';
+  }
+
+  function dueSoonItems(){
+    var shared = state.data.sharedTasks.map(function(t){ return Object.assign({}, t, { _scope: "sharedTasks" }); });
+    var mine = state.role ? state.data.myTasks.map(function(t){ return Object.assign({}, t, { _scope: "myTasks" }); }) : [];
+    return shared.concat(mine)
+      .filter(function(t){ return !t.done && t.dueDate && t.dueDate <= todayISO(); })
+      .sort(function(a,b){ return a.dueDate.localeCompare(b.dueDate); });
+  }
+
+  function computeCatBreakdown(){
+    var now = new Date();
+    var monthKey = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+    var byCat = {};
+    var totalExpense = 0;
+    state.data.financeTx.forEach(function(t){
+      if(t.type==="gasto" && (t.date||"").slice(0,7)===monthKey){
+        byCat[t.category] = (byCat[t.category]||0) + Number(t.amount||0);
+        totalExpense += Number(t.amount||0);
+      }
+    });
+    var cats = Object.keys(byCat).sort(function(a,b){return byCat[b]-byCat[a];});
+    return { byCat: byCat, cats: cats, total: totalExpense };
+  }
+
+  function monthBreakdown(byCat, cats, totalExpense){
+    if(!cats.length) return '<div class="empty">Todavía no hay gastos este mes.</div>';
+    return '<div class="bars">' + cats.map(function(c){
+      var v = byCat[c]; var pct = totalExpense ? Math.round(v/totalExpense*100) : 0;
+      var colorIdx = FIN_CATS.indexOf(c); if(colorIdx < 0) colorIdx = 0;
+      var color = 'var(' + CAT_VARS[colorIdx % CAT_VARS.length] + ')';
+      return '<div class="bar-row"><div class="bar-label">'+escapeHtml(c)+'</div><div class="bar-track"><div class="bar-fill" style="width:'+pct+'%;background:'+color+'"></div></div><div class="bar-val mono">'+fmtMoney(v)+'</div></div>';
+    }).join("") + '</div>';
+  }
+
+  function sectionFinance(){
+    var now = new Date();
+    var monthKey = now.getFullYear()+"-"+String(now.getMonth()+1).padStart(2,"0");
+    var income=0, expense=0;
+    state.data.financeTx.forEach(function(t){
+      if((t.date||"").slice(0,7)===monthKey){
+        if(t.type==="ingreso") income+=Number(t.amount||0); else expense+=Number(t.amount||0);
+      }
+    });
+    var rows = state.data.financeTx.slice(0,30);
+    var cat = computeCatBreakdown();
+    var chartHtml = cat.cats.length
+      ? '<div class="chart-row">' + expenseDonutSvg(cat.byCat, cat.cats, cat.total) + monthBreakdown(cat.byCat, cat.cats, cat.total) + '</div>'
+      : monthBreakdown(cat.byCat, cat.cats, cat.total);
+
+    var marketStatusText = marketStatus === "loading" ? "Actualizando…" :
+      marketStatus === "error" ? "No se pudo obtener la cotización" :
+      marketStatus === "ok" ? "Actualizado " + (marketLastSync ? marketLastSync.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"}) : "") :
+      "Sin datos todavía";
+    var marketStatusDot = marketStatus === "error" ? "bad" : (marketStatus === "ok" ? "" : "off");
+    var dolarOrdered = DOLAR_ORDER.map(function(key){
+      return marketRates.find(function(r){ return r.casa === key; });
+    }).filter(Boolean);
+    var marketBody = dolarOrdered.length ? '<div class="grid-tiles" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin-bottom:0">' +
+      dolarOrdered.map(function(r){
+        return '<div class="tile"><div class="tile-label">'+escapeHtml(DOLAR_LABELS[r.casa]||r.nombre)+'</div>' +
+          '<div class="tile-value mono" style="font-size:18px">$'+Math.round(r.venta)+'</div>' +
+          '<div class="section-sub" style="margin-top:2px">compra $'+Math.round(r.compra)+'</div></div>';
+      }).join("") + '</div>'
+      : '<div class="empty">'+(marketStatus==="error"?"No se pudo conectar con la cotización del dólar.":"Todavía no se cargó la cotización.")+'</div>';
+    var marketCard = '<div class="card"><h2 style="display:flex;align-items:center;justify-content:space-between">Cotización del dólar' +
+      '<button class="btn ghost small" onclick="NV.syncMarket()">↻</button></h2>' +
+      '<div class="sync-note" style="margin-bottom:10px"><span class="dot '+marketStatusDot+'"></span>'+marketStatusText+'</div>' +
+      marketBody +
+      '</div>';
+
+    var tickers = tickerList();
+    var stockStatusText = stockStatus === "no-config" ? "Sin configurar" :
+      stockStatus === "loading" ? "Actualizando…" :
+      stockStatus === "error" ? "No se pudo obtener las acciones" :
+      stockStatus === "ok" ? "Actualizado " + (stockLastSync ? stockLastSync.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"}) : "") :
+      "Sin datos todavía";
+    var stockStatusDot = stockStatus === "error" ? "bad" : (stockStatus === "ok" ? "" : "off");
+    var stockBody;
+    if(stockStatus === "no-config"){
+      stockBody = '<div class="empty">Agregá tu clave de Finnhub y los tickers a seguir en Configuración.</div>';
+    } else if(!tickers.length || !Object.keys(stockQuotes).length){
+      stockBody = '<div class="empty">'+(stockStatus==="error"?"No se pudo conectar con Finnhub.":"Todavía no se cargaron las acciones.")+'</div>';
+    } else {
+      stockBody = '<div class="grid-tiles" style="grid-template-columns:repeat(auto-fit,minmax(110px,1fr));margin-bottom:0">' +
+        tickers.map(function(sym){
+          var q = stockQuotes[sym];
+          if(!q || (!q.c && !q.pc)) return '<div class="tile"><div class="tile-label">'+escapeHtml(sym)+'</div><div class="section-sub">no encontrado</div></div>';
+          var up = q.dp >= 0;
+          return '<div class="tile"><div class="tile-label">'+escapeHtml(sym)+'</div>' +
+            '<div class="tile-value mono" style="font-size:18px">$'+q.c.toFixed(2)+'</div>' +
+            '<div class="'+(up?'good':'bad')+'" style="font-size:12px;font-weight:600">'+(up?'▲':'▼')+' '+Math.abs(q.dp).toFixed(2)+'%</div></div>';
+        }).join("") + '</div>';
+    }
+    var stocksCard = '<div class="card"><h2 style="display:flex;align-items:center;justify-content:space-between">Acciones' +
+      '<button class="btn ghost small" onclick="NV.syncStocks()">↻</button></h2>' +
+      '<div class="sync-note" style="margin-bottom:10px"><span class="dot '+stockStatusDot+'"></span>'+stockStatusText+'</div>' +
+      stockBody +
+      '</div>';
+
+    var sheetConnected = !!appState.config.sheetCsvUrl;
+    var sheetStatusText = !sheetConnected ? "Sin planilla conectada" :
+      sheetSyncStatus === "loading" ? "Actualizando planilla…" :
+      sheetSyncStatus === "error" ? "No se pudo leer la planilla" :
+      sheetSyncStatus === "ok" ? "Planilla sincronizada" + (sheetLastSync ? " · " + sheetLastSync.toLocaleTimeString("es-AR",{hour:"2-digit",minute:"2-digit"}) : "") :
+      "Planilla conectada";
+    var sheetStatusDot = !sheetConnected ? "off" : (sheetSyncStatus === "error" ? "bad" : (sheetSyncStatus === "ok" ? "" : "off"));
+    var sheetBar = '<div class="sheet-bar">' +
+      '<span class="sync-note"><span class="dot ' + sheetStatusDot + '"></span>' + sheetStatusText + '</span>' +
+      (sheetConnected ? '<button class="btn ghost small" onclick="NV.syncSheet()">↻ Actualizar</button>' : '<button class="btn ghost small" onclick="NV.openModal(\'settings\')">Conectar planilla</button>') +
+      '</div>';
+
+    return (
+      '<div class="section-head"><div><h1>Finanzas <span class="tag-shared">Compartido</span></h1><div class="section-sub">Ingresos y gastos de la casa.</div></div>' +
+      '<button class="btn primary" onclick="NV.openModal(\'tx\')">+ Movimiento</button></div>' +
+      '<div class="grid-tiles" style="grid-template-columns:repeat(3,1fr)">' +
+        '<div class="tile"><div class="tile-label">Ingresos del mes</div><div class="tile-value good">'+fmtMoney(income)+'</div></div>' +
+        '<div class="tile"><div class="tile-label">Gastos del mes</div><div class="tile-value bad">'+fmtMoney(expense)+'</div></div>' +
+        '<div class="tile"><div class="tile-label">Balance</div><div class="tile-value '+((income-expense)>=0?'good':'bad')+'">'+fmtMoney(income-expense)+'</div></div>' +
+      '</div>' +
+      marketCard +
+      stocksCard +
+      sheetBar +
+      '<div class="card"><h2>Gastos por categoría (este mes)</h2>'+chartHtml+'</div>' +
+      '<div class="card"><h2>Movimientos</h2>' +
+      (rows.length ? rows.map(function(t){
+        var isSheet = t.source === "sheet";
+        return '<div class="ledger-row"><div class="ledger-desc"><div>'+escapeHtml(t.desc)+(isSheet?' <span class="chip-mini">planilla</span>':'')+'</div><div class="cat">'+escapeHtml(t.category)+' · '+fmtDate(t.date)+'</div></div>' +
+          '<div class="ledger-amt '+(t.type==='ingreso'?'in':'out')+' mono">'+(t.type==='ingreso'?'+':'-')+fmtMoney(t.amount)+'</div>' +
+          (isSheet ? '' : '<button class="icon-btn" onclick="NV.deleteItem(\'financeTx\',\''+t.id+'\')">✕</button>') +
+          '</div>';
+      }).join("") : '<div class="empty">Sin movimientos todavía.</div>') +
+      '</div>'
+    );
+  }
+
+  function dayAgendaHtml(dateStr){
+    if(!dateStr) return "";
+    var d = new Date(dateStr + "T00:00:00");
+    var items = [];
+    state.data.events.filter(function(e){ return e.date === dateStr; }).forEach(function(e){
+      items.push({ time: e.hora || null, label: e.title, meta: escapeHtml(EVENT_CATS[e.category]||"Otro") + (e.notes ? " · "+escapeHtml(e.notes) : ""), kind: "evento" });
+    });
+    state.data.sharedTasks.filter(function(t){ return t.dueDate === dateStr && !t.done; }).forEach(function(t){
+      items.push({ time: null, label: t.title, meta: "Tarea compartida", kind: "tarea" });
+    });
+    if(state.role){
+      state.data.myTasks.filter(function(t){ return t.dueDate === dateStr && !t.done; }).forEach(function(t){
+        items.push({ time: null, label: t.title, meta: "Tu tarea personal", kind: "tarea" });
+      });
+    }
+    items.sort(function(a,b){
+      if(a.time && b.time) return a.time.localeCompare(b.time);
+      if(a.time) return -1;
+      if(b.time) return 1;
+      return 0;
+    });
+    var list = items.length ? items.map(function(it){
+      return '<div class="row"><div class="row-body"><div class="row-title">'+(it.time?'<span class="mono" style="color:var(--wine)">'+it.time+'</span> · ':'')+escapeHtml(it.label)+'</div>' +
+        '<div class="row-meta"><span class="pill neutral">'+it.meta+'</span></div></div></div>';
+    }).join("") : '<div class="empty">Nada agendado este día.</div>';
+    return '<h2>'+d.toLocaleDateString("es-AR",{weekday:"long", day:"numeric", month:"long"})+'</h2>' +
+      '<div class="list" style="margin:12px 0">' + list + '</div>' +
+      '<div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cerrar</button>' +
+      '<button type="button" class="btn primary" onclick="NV.openModal(\'event\',\''+dateStr+'\')">+ Evento este día</button></div>';
+  }
+
+  function sectionCalendar(){
+    var now = new Date();
+    var y=now.getFullYear(), m=now.getMonth();
+    var first = new Date(y,m,1);
+    var startDow = (first.getDay()+6)%7;
+    var daysInMonth = new Date(y,m+1,0).getDate();
+    var eventsByDay = {};
+    state.data.events.forEach(function(e){
+      if(e.date && e.date.slice(0,7) === (y+"-"+String(m+1).padStart(2,"0"))){
+        var day = Number(e.date.slice(8,10));
+        eventsByDay[day] = (eventsByDay[day]||0)+1;
+      }
+    });
+    var cells = [];
+    for(var i=0;i<startDow;i++) cells.push('<div class="cal-cell empty"></div>');
+    for(var d=1; d<=daysInMonth; d++){
+      var isToday = d === now.getDate();
+      var cellDate = y+"-"+String(m+1).padStart(2,"0")+"-"+String(d).padStart(2,"0");
+      cells.push('<div class="cal-cell '+(isToday?'today':'')+'" onclick="NV.openDay(\''+cellDate+'\')">'+d+ (eventsByDay[d] ? '<span class="cal-dot"></span>' : '') +'</div>');
+    }
+    var upcoming = state.data.events.filter(function(e){return e.date>=todayISO();}).sort(function(a,b){return a.date.localeCompare(b.date);});
+    return (
+      '<div class="section-head"><div><h1>Calendario <span class="tag-shared">Compartido</span></h1><div class="section-sub">'+MONTHS[m]+' de '+y+' · tocá un día para ver el detalle</div></div>' +
+      '<button class="btn primary" onclick="NV.openModal(\'event\')">+ Evento</button></div>' +
+      '<div class="card"><div class="cal-grid">' + DOWS.map(function(d){return '<div class="cal-dow">'+d+'</div>';}).join("") + cells.join("") + '</div></div>' +
+      '<div class="card"><h2>Próximos eventos</h2><div class="list">' +
+      (upcoming.length ? upcoming.map(function(e){
+        return '<div class="row"><div class="row-body"><div class="row-title">'+escapeHtml(e.title)+'</div>' +
+          '<div class="row-meta"><span class="pill neutral">'+fmtDate(e.date)+(e.hora?' · '+e.hora:'')+'</span><span class="pill neutral">'+escapeHtml(EVENT_CATS[e.category]||"Otro")+'</span></div>' +
+          (e.notes ? '<div class="section-sub" style="margin-top:4px">'+escapeHtml(e.notes)+'</div>' : '') +
+          '</div><div class="row-actions"><button class="icon-btn" onclick="NV.deleteItem(\'events\',\''+e.id+'\')">✕</button></div></div>';
+      }).join("") : '<div class="empty">No hay eventos próximos.</div>') +
+      '</div></div>'
+    );
+  }
+
+  function sectionGoals(){
+    var goals = state.data.goals;
+    return (
+      '<div class="section-head"><div><h1>Metas <span class="tag-shared">Compartido</span></h1><div class="section-sub">A dónde quieren llegar juntos.</div></div>' +
+      '<button class="btn primary" onclick="NV.openModal(\'goal\')">+ Meta</button></div>' +
+      (goals.length ? goals.map(function(g){
+        var statusClass = g.status==="lograda"?"good":g.status==="pausada"?"neutral":"warn";
+        var head = '<div class="card"><div style="display:flex;justify-content:space-between;gap:10px;align-items:flex-start">' +
+          '<div><h2>'+escapeHtml(g.title)+(g.kind==="ahorro"?' <span class="tag-personal" style="background:var(--gold-soft, var(--warn-soft));color:var(--gold)">Ahorro</span>':'')+'</h2>'+(g.description?'<div class="section-sub">'+escapeHtml(g.description)+'</div>':'')+'</div>' +
+          '<span class="pill '+statusClass+'">'+g.status+'</span></div>';
+        var body;
+        if(g.kind === "ahorro"){
+          var remaining = Math.max(0, g.targetAmount - g.savedAmount);
+          body = '<div class="section-sub" style="margin:8px 0 6px">Ahorrado <strong class="mono" style="color:var(--ink)">'+fmtMoney(g.savedAmount)+'</strong> de <strong class="mono" style="color:var(--ink)">'+fmtMoney(g.targetAmount)+'</strong> — falta <strong class="mono" style="color:var(--ink)">'+fmtMoney(remaining)+'</strong></div>' +
+            '<div class="goal-progress"><div class="goal-progress-fill" style="width:'+g.progress+'%"></div></div>' +
+            '<form data-goal-id="'+g.id+'" onsubmit="NV.submitGoalContribution(event,\''+g.id+'\')" style="display:flex;gap:8px;margin-top:12px">' +
+              '<input type="number" step="0.01" name="amount" placeholder="Aporte de este mes" required style="flex:1;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)">' +
+              '<button class="btn primary small" type="submit">+ Agregar</button>' +
+              '<button type="button" class="icon-btn" onclick="NV.deleteItem(\'goals\',\''+g.id+'\')">✕</button>' +
+            '</form>' +
+            (g.contributions && g.contributions.length ? '<div class="list" style="margin-top:10px">' + g.contributions.slice().reverse().slice(0,6).map(function(c){
+              return '<div class="row" style="padding:6px 2px"><div class="row-body"><div class="row-title" style="font-size:13px">'+fmtDate(c.date)+(c.by?' · '+escapeHtml(roleName(c.by)):'')+'</div></div><div class="mono" style="font-size:13px">'+fmtMoney(c.amount)+'</div></div>';
+            }).join("") + '</div>' : '') +
+            (g.targetDate ? '<div class="section-sub" style="margin-top:8px">Meta para '+fmtDate(g.targetDate)+'</div>' : '');
+        } else {
+          body = '<div class="goal-progress"><div class="goal-progress-fill" style="width:'+g.progress+'%"></div></div>' +
+            '<div style="display:flex;align-items:center;gap:10px">' +
+            '<input type="range" min="0" max="100" value="'+g.progress+'" oninput="NV.setGoalProgress(\''+g.id+'\', this.value)" style="flex:1">' +
+            '<span class="mono" style="width:40px;text-align:right">'+g.progress+'%</span>' +
+            '<button class="icon-btn" onclick="NV.deleteItem(\'goals\',\''+g.id+'\')">✕</button></div>' +
+            (g.targetDate ? '<div class="section-sub" style="margin-top:6px">Meta para '+fmtDate(g.targetDate)+'</div>' : '');
+        }
+        return head + body + '</div>';
+      }).join("") : '<div class="card"><div class="empty">Todavía no armaron metas juntos.</div></div>')
+    );
+  }
+
+  function sectionMessages(){
+    var msgs = state.data.messages;
+    return (
+      '<div class="section-head"><div><h1>Mensajes <span class="tag-shared">Compartido</span></h1><div class="section-sub">Un rincón para dejarse mensajes lindos.</div></div>' +
+      '<button class="btn primary" onclick="NV.openModal(\'message\')">+ Mensaje</button></div>' +
+      '<div class="msg-feed">' +
+      (msgs.length ? msgs.map(function(m){
+        var mine = m.from === state.role;
+        return '<div class="msg-bubble '+(mine?"mine":"theirs")+'">' +
+          '<div class="msg-meta"><strong>'+escapeHtml(roleName(m.from))+'</strong><span>'+fmtDateTime(m.date)+'</span></div>' +
+          '<div class="msg-text">'+escapeHtml(m.text)+'</div>' +
+          '<button class="icon-btn msg-del" onclick="NV.deleteItem(\'messages\',\''+m.id+'\')">✕</button>' +
+          '</div>';
+      }).join("") : '<div class="card"><div class="empty">Todavía no se dejaron ningún mensaje. ¡Animate a escribir el primero! 💌</div></div>') +
+      '</div>'
+    );
+  }
+
+  function sectionMyTasks(){
+    var pend = state.data.myTasks.filter(function(t){return !t.done;});
+    var done = state.data.myTasks.filter(function(t){return t.done;});
+    return (
+      '<div class="section-head"><div><h1>Tareas de '+escapeHtml(roleName(state.role))+' <span class="tag-personal">Personal</span></h1><div class="section-sub">Solo tuyo — nadie más lo ve por defecto.</div></div>' +
+      '<button class="btn primary moss" onclick="NV.openModal(\'task-mine\')">+ Nueva tarea</button></div>' +
+      '<div class="card"><h2>Pendientes ('+pend.length+')</h2><div class="list">' +
+      (pend.length ? pend.map(function(t){return taskRow(t,"myTasks");}).join("") : '<div class="empty">Nada pendiente.</div>') +
+      '</div></div>' +
+      (done.length ? '<div class="card"><h2>Hechas</h2><div class="list">'+done.map(function(t){return taskRow(t,"myTasks");}).join("")+'</div></div>' : "")
+    );
+  }
+
+  function sectionClients(){
+    var all = state.data.myClients;
+    var q = stripAccents(state.clientSearch||"");
+    var filterStage = state.clientFilter || "all";
+    var clients = all.filter(function(c){
+      if(filterStage !== "all" && c.stage !== filterStage) return false;
+      if(!q) return true;
+      var hay = stripAccents([c.name,c.email,c.phone,c.comment].join(" "));
+      return hay.indexOf(q) !== -1;
+    });
+    var todayS = todayISO();
+    var counts = {};
+    all.forEach(function(c){ counts[c.stage] = (counts[c.stage]||0) + 1; });
+
+    var rows = clients.length ? clients.map(function(c){
+      var sm = stageMeta(c.stage);
+      var recontactCls = "";
+      if(c.recontactDate){
+        if(c.recontactDate < todayS) recontactCls = "bad";
+        else if(c.recontactDate <= todayISO()) recontactCls = "warn";
+      }
+      return '<div class="client-row" onclick="NV.editClient(\''+c.id+'\')">' +
+        '<div class="cr-main"><div class="cr-name">'+escapeHtml(c.name)+(c.isInvestor?' <span class="pill good" style="padding:1px 8px;font-size:10px">Inversor</span>':'')+'</div>' +
+        '<div class="cr-sub">'+[c.email, c.phone].filter(Boolean).map(escapeHtml).join(" · ")+'</div></div>' +
+        '<div class="cr-col"><span class="pill '+sm.cls+'">'+escapeHtml(sm.label)+'</span></div>' +
+        '<div class="cr-col cr-hide-sm">'+(c.nextAction?escapeHtml(c.nextAction):'<span class="ink-soft">—</span>')+'</div>' +
+        '<div class="cr-col cr-hide-sm '+(recontactCls?'cr-'+recontactCls:'')+'">'+(c.recontactDate?fmtDate(c.recontactDate):'—')+'</div>' +
+        '<div class="cr-col mono cr-hide-sm">'+(c.potentialValue?fmtMoney(c.potentialValue):'—')+'</div>' +
+        '<button class="icon-btn" onclick="event.stopPropagation();NV.deleteItem(\'myClients\',\''+c.id+'\')">✕</button>' +
+        '</div>';
+    }).join("") : '<div class="empty" style="padding:24px">No hay clientes que coincidan.</div>';
+
+    return (
+      '<div class="section-head"><div><h1>CRM de Clientes <span class="tag-personal">Personal</span></h1><div class="section-sub">Tu propio pipeline — no lo ve tu pareja en la navegación compartida.</div></div>' +
+      '<div style="display:flex;gap:8px;flex-wrap:wrap">' +
+      '<label class="btn ghost small" style="cursor:pointer">⇪ Importar Excel<input type="file" accept=".xlsx,.xls,.csv" style="display:none" onchange="NV.importClientFile(this)"></label>' +
+      '<button class="btn primary moss" onclick="NV.openModal(\'client\')">+ Cliente</button></div></div>' +
+      (clientImportMsg ? '<div class="banner" style="background:'+(clientImportMsg.ok?'var(--good-soft)':'var(--bad-soft)')+';color:var(--ink)">'+escapeHtml(clientImportMsg.text)+'</div>' : '') +
+      '<div class="card" style="margin-bottom:14px">' +
+      '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">' +
+      '<input type="text" placeholder="Buscar por nombre, mail, teléfono…" value="'+escapeHtml(state.clientSearch||"")+'" oninput="NV.setClientSearch(this.value)" style="flex:1;min-width:180px;padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)">' +
+      '<select onchange="NV.setClientFilter(this.value)" style="padding:8px 10px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)">' +
+      '<option value="all" '+(filterStage==="all"?"selected":"")+'>Todos los estados ('+all.length+')</option>' +
+      STAGES.map(function(s){ return '<option value="'+s.key+'" '+(filterStage===s.key?"selected":"")+'>'+s.label+' ('+(counts[s.key]||0)+')</option>'; }).join("") +
+      '</select></div></div>' +
+      '<div class="card" style="padding:0;overflow:hidden">' +
+      '<div class="client-row client-row-head"><div class="cr-main">Cliente</div><div class="cr-col">Estado</div><div class="cr-col cr-hide-sm">Próxima acción</div><div class="cr-col cr-hide-sm">Recontacto</div><div class="cr-col cr-hide-sm">Valor</div><div></div></div>' +
+      rows +
+      '</div>'
+    );
+  }
+
+  function sectionNotes(){
+    var notes = state.data.myNotes;
+    return (
+      '<div class="section-head"><div><h1>Notas de '+escapeHtml(roleName(state.role))+' <span class="tag-personal">Personal</span></h1><div class="section-sub">Tu propio espacio para anotar lo que quieras.</div></div>' +
+      '<button class="btn primary moss" onclick="NV.openModal(\'note\')">+ Nota</button></div>' +
+      '<div class="notes-grid">' +
+      (notes.length ? notes.map(function(n){
+        return '<div class="note-card"><h3>'+escapeHtml(n.title)+'</h3><p>'+escapeHtml(n.body)+'</p>' +
+          '<div style="text-align:right;margin-top:8px"><button class="icon-btn" onclick="NV.deleteItem(\'myNotes\',\''+n.id+'\')">✕</button></div></div>';
+      }).join("") : '<div class="empty">Todavía no escribiste ninguna nota.</div>') +
+      '</div>'
+    );
+  }
+
+  function sectionAssistant(){
+    var hasConfig = appState.config.aiApiKey && appState.config.aiModel;
+    var head = '<div class="section-head"><div><h1>Asistente <span class="tag-shared">Compartido</span></h1><div class="section-sub">Un pantallazo de su información, armado por IA.</div></div></div>';
+    if(!hasConfig){
+      return head + '<div class="card"><h2>Falta configurar la IA</h2>' +
+        '<p class="section-sub" style="margin:8px 0 14px">Para activar el asistente necesitás tu propia clave de la API de Anthropic (Claude) — es la que mejor funciona para una app que corre solo en el navegador, sin servidor propio.</p>' +
+        '<ol style="margin:0 0 14px 18px;padding:0;font-size:13.5px;color:var(--ink-soft);line-height:1.7">' +
+        '<li>Creá una cuenta en <span class="mono">console.anthropic.com</span> y generá una API key.</li>' +
+        '<li>Cargala en Configuración junto con el nombre del modelo que quieras usar.</li>' +
+        '</ol>' +
+        '<button type="button" class="btn primary" onclick="NV.openModal(\'settings\')">⚙ Ir a Configuración</button>' +
+        '</div>';
+    }
+    var insightsBody;
+    if(aiInsightsStatus === "loading"){
+      insightsBody = '<div class="empty">Analizando su información…</div>';
+    } else if(aiInsightsStatus === "error"){
+      insightsBody = '<div class="empty">No se pudo conectar con la IA: '+escapeHtml((aiInsights&&aiInsights.text)||"error")+'</div>';
+    } else if(aiInsights && aiInsights.text){
+      insightsBody = '<div style="white-space:pre-wrap;line-height:1.6;font-size:14px">'+escapeHtml(aiInsights.text)+'</div>' +
+        (aiInsights.generatedAt ? '<div class="section-sub" style="margin-top:10px">Actualizado '+fmtDateTime(aiInsights.generatedAt)+'</div>' : '');
+    } else {
+      insightsBody = '<div class="empty">Todavía no se generó ningún análisis.</div>';
+    }
+    var chatBody = aiChat.length ? aiChat.map(function(m){
+      return '<div class="ai-msg '+(m.role==="user"?"user":"assistant")+'"><div class="ai-msg-role">'+(m.role==="user"?escapeHtml(roleName(state.role)):"Asistente")+'</div><div class="ai-msg-text">'+escapeHtml(m.text)+'</div></div>';
+    }).join("") : '<div class="empty">Preguntale algo sobre sus tareas, finanzas, calendario o metas.</div>';
+    return head +
+      '<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;gap:10px"><h2>Análisis automático</h2>' +
+      '<button type="button" class="btn ghost small" onclick="NV.refreshAiInsights()" '+(aiInsightsStatus==="loading"?"disabled":"")+'>↻ Actualizar</button></div>' +
+      insightsBody + '</div>' +
+      '<div class="card"><h2>Preguntale al asistente</h2>' +
+      '<div class="ai-chat">' + chatBody + '</div>' +
+      '<form onsubmit="NV.submitAiChat(event)" style="display:flex;gap:8px;margin-top:12px">' +
+      '<input type="text" name="text" placeholder="Ej: ¿cuánto gastamos este mes en comida?" required style="flex:1;padding:9px 12px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink)" '+(aiChatStatus==="loading"?"disabled":"")+'>' +
+      '<button class="btn primary" type="submit" '+(aiChatStatus==="loading"?"disabled":"")+'>Enviar</button>' +
+      '</form></div>';
+  }
+
+  var SECTION_RENDER = {
+    inicio: sectionInicio, tareas: sectionSharedTasks, finanzas: sectionFinance,
+    calendario: sectionCalendar, metas: sectionGoals, mensajes: sectionMessages, asistente: sectionAssistant,
+    "mis-tareas": sectionMyTasks, clientes: sectionClients, notas: sectionNotes
+  };
+  var SECTION_TITLE = {
+    inicio:"Inicio", tareas:"Tareas", finanzas:"Finanzas", calendario:"Calendario", metas:"Metas", mensajes:"Mensajes", asistente:"Asistente",
+    "mis-tareas":"Mis tareas", clientes:"Clientes", notas:"Notas"
+  };
+  var SECTION_ICON = {
+    inicio:"⌂", tareas:"☑", finanzas:"◈", calendario:"▦", metas:"◎", mensajes:"♥", asistente:"✦",
+    "mis-tareas":"☑", clientes:"◈", notas:"✎"
+  };
+
+  function navItems(){
+    var personalItems = ["mis-tareas"];
+    personalItems.push(state.role === "ian" ? "clientes" : "notas");
+    return { shared: ["tareas","finanzas","calendario","metas","mensajes","asistente"], personal: personalItems };
+  }
+
+  function modalHtml(){
+    if(!state.modal) return "";
+    var content = "";
+    if(state.modal === "day"){
+      content = dayAgendaHtml(state.selectedDay);
+    } else if(state.modal === "task-shared" || state.modal === "task-mine"){
+      var isShared = state.modal === "task-shared";
+      content = '<h2>'+(isShared?'Nueva tarea compartida':'Nueva tarea personal')+'</h2>' +
+        '<form class="form" onsubmit="NV.submitTask(event, \''+(isShared?'shared':'mine')+'\')">' +
+        '<div class="field"><label>Título</label><input name="title" required autofocus placeholder="¿Qué hay que hacer?"></div>' +
+        '<div class="field"><label>Fecha límite (opcional)</label><input type="date" name="dueDate"></div>' +
+        '<div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div>' +
+        '</form>';
+    } else if(state.modal === "tx"){
+      content = '<h2>Nuevo movimiento</h2><form class="form" onsubmit="NV.submitTx(event)">' +
+        '<div class="field"><label>Descripción</label><input name="desc" required autofocus placeholder="Ej: Supermercado"></div>' +
+        '<div class="form-row">' +
+        '<div class="field"><label>Monto</label><input type="number" step="0.01" name="amount" required></div>' +
+        '<div class="field"><label>Tipo</label><select name="type"><option value="gasto">Gasto</option><option value="ingreso">Ingreso</option></select></div>' +
+        '</div><div class="form-row">' +
+        '<div class="field"><label>Categoría</label><select name="category">'+FIN_CATS.map(function(c){return '<option>'+c+'</option>';}).join("")+'</select></div>' +
+        '<div class="field"><label>Fecha</label><input type="date" name="date" value="'+todayISO()+'"></div>' +
+        '</div><div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form>';
+    } else if(state.modal === "event"){
+      content = '<h2>Nuevo evento</h2><form class="form" onsubmit="NV.submitEvent(event)">' +
+        '<div class="field"><label>Título</label><input name="title" required autofocus></div>' +
+        '<div class="form-row">' +
+        '<div class="field"><label>Fecha</label><input type="date" name="date" value="'+escapeHtml(state.modalPrefillDate||"")+'" required></div>' +
+        '<div class="field"><label>Hora (opcional)</label><input type="time" name="hora"></div>' +
+        '</div><div class="field"><label>Tipo</label><select name="category">'+Object.keys(EVENT_CATS).map(function(k){return '<option value="'+k+'">'+EVENT_CATS[k]+'</option>';}).join("")+'</select></div>' +
+        '<div class="field"><label>Notas (opcional)</label><textarea name="notes"></textarea></div>' +
+        '<div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form>';
+    } else if(state.modal === "goal"){
+      content = '<h2>Nueva meta</h2><form class="form" onsubmit="NV.submitGoal(event)">' +
+        '<div class="field"><label>Título</label><input name="title" required autofocus placeholder="Ej: Ahorrar para el viaje"></div>' +
+        '<div class="field"><label>Tipo de meta</label><select name="kind" onchange="document.getElementById(\'goal-amount-field\').style.display=this.value===\'ahorro\'?\'block\':\'none\'">' +
+          '<option value="simple">General (barra de progreso manual)</option>' +
+          '<option value="ahorro">Ahorro (registro mensual)</option>' +
+        '</select></div>' +
+        '<div class="field" id="goal-amount-field" style="display:none"><label>Monto objetivo</label><input type="number" step="0.01" name="targetAmount" placeholder="Ej: 3000"></div>' +
+        '<div class="field"><label>Descripción (opcional)</label><textarea name="description"></textarea></div>' +
+        '<div class="field"><label>Fecha objetivo (opcional)</label><input type="date" name="targetDate"></div>' +
+        '<div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form>';
+    } else if(state.modal === "client"){
+      var editing = state.editingClientId ? appState.personal.ian.clients.find(function(x){ return x.id === state.editingClientId; }) : null;
+      var cf = editing || { name:"", email:"", phone:"", stage:"Prospecto", firstContactDate:"", nextAction:"", lastUpdateDate:"", potentialValue:"", responsible:"Ian", recontactDate:"", isInvestor:false, comment:"" };
+      content = '<h2>'+(editing?'Editar cliente':'Nuevo cliente')+'</h2><form class="form" onsubmit="NV.submitClient(event)">' +
+        '<div class="form-row">' +
+        '<div class="field"><label>Nombre</label><input name="name" required autofocus value="'+escapeHtml(cf.name)+'"></div>' +
+        '<div class="field"><label>Etapa</label><select name="stage">'+STAGES.map(function(s){return '<option value="'+s.key+'" '+(s.key===cf.stage?'selected':'')+'>'+s.label+'</option>';}).join("")+'</select></div>' +
+        '</div><div class="form-row">' +
+        '<div class="field"><label>Email (opcional)</label><input type="email" name="email" value="'+escapeHtml(cf.email)+'"></div>' +
+        '<div class="field"><label>Teléfono (opcional)</label><input name="phone" value="'+escapeHtml(cf.phone)+'"></div>' +
+        '</div><div class="form-row">' +
+        '<div class="field"><label>Próxima acción</label><input name="nextAction" list="next-action-opts" value="'+escapeHtml(cf.nextAction)+'">' +
+          '<datalist id="next-action-opts">'+NEXT_ACTION_OPTIONS.map(function(o){return '<option value="'+escapeHtml(o)+'">';}).join("")+'</datalist></div>' +
+        '<div class="field"><label>Fecha de recontacto</label><input type="date" name="recontactDate" value="'+escapeHtml(cf.recontactDate||"")+'"></div>' +
+        '</div><div class="form-row">' +
+        '<div class="field"><label>Primer contacto</label><input type="date" name="firstContactDate" value="'+escapeHtml(cf.firstContactDate||"")+'"></div>' +
+        '<div class="field"><label>Última actualización</label><input type="date" name="lastUpdateDate" value="'+escapeHtml(cf.lastUpdateDate||"")+'"></div>' +
+        '</div><div class="form-row">' +
+        '<div class="field"><label>Valor potencial</label><input type="number" step="0.01" name="potentialValue" value="'+escapeHtml(cf.potentialValue===null?"":String(cf.potentialValue))+'"></div>' +
+        '<div class="field"><label>Responsable</label><input name="responsible" list="responsable-opts" value="'+escapeHtml(cf.responsible)+'">' +
+          '<datalist id="responsable-opts">'+RESPONSABLE_OPTIONS.map(function(o){return '<option value="'+escapeHtml(o)+'">';}).join("")+'</datalist></div>' +
+        '</div>' +
+        '<div class="field" style="flex-direction:row;align-items:center;gap:8px"><input type="checkbox" name="isInvestor" id="cf-inv" style="width:auto" '+(cf.isInvestor?'checked':'')+'><label for="cf-inv" style="margin:0">¿Es inversor?</label></div>' +
+        '<div class="field"><label>Comentario</label><textarea name="comment">'+escapeHtml(cf.comment)+'</textarea></div>' +
+        '<div class="form-actions" '+(editing?'style="justify-content:space-between"':'')+'>' +
+        (editing ? '<button type="button" class="btn ghost" style="color:var(--bad)" onclick="NV.deleteItem(\'myClients\',\''+editing.id+'\');NV.closeModal()">Borrar</button>' : '') +
+        '<div style="display:flex;gap:10px"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary moss" type="submit">Guardar</button></div>' +
+        '</div></form>';
+    } else if(state.modal === "note"){
+      content = '<h2>Nueva nota</h2><form class="form" onsubmit="NV.submitNote(event)">' +
+        '<div class="field"><label>Título</label><input name="title" required autofocus></div>' +
+        '<div class="field"><label>Contenido</label><textarea name="body" rows="5"></textarea></div>' +
+        '<div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary moss" type="submit">Guardar</button></div></form>';
+    } else if(state.modal === "message"){
+      content = '<h2>Nuevo mensaje 💌</h2><form class="form" onsubmit="NV.submitMessage(event)">' +
+        '<div class="field"><label>Para '+escapeHtml(roleName(otherRole(state.role)))+'</label><textarea name="text" rows="4" required autofocus placeholder="Escribí algo lindo..."></textarea></div>' +
+        '<div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary" type="submit">Enviar</button></div></form>';
+    } else if(state.modal === "settings"){
+      content = '<h2>Configuración</h2><form class="form" onsubmit="NV.submitConfig(event)">' +
+        '<div class="field"><label>Nombre de Ian</label><input name="ianName" value="'+escapeHtml(appState.config.names.ian)+'"></div>' +
+        '<div class="field"><label>Nombre de tu pareja</label><input name="partnerName" value="'+escapeHtml(appState.config.names.partner)+'"></div>' +
+        '<div class="field"><label>Símbolo de moneda</label><input name="currency" value="'+escapeHtml(appState.config.currency)+'" style="max-width:80px"></div>' +
+        '<div class="field"><label>Planilla de gastos (Google Sheets, opcional)</label>' +
+          '<input name="sheetCsvUrl" value="'+escapeHtml(appState.config.sheetCsvUrl)+'" placeholder="Pegá acá el link CSV publicado">' +
+          '<div class="section-sub" style="margin-top:4px">En tu planilla: Archivo → Compartir → Publicar en la Web → elegí la hoja → formato CSV → copiá ese link (no el link normal de compartir).</div>' +
+        '</div>' +
+        '<div class="field"><label>Clave de Finnhub (opcional, para ver acciones)</label>' +
+          '<input name="finnhubApiKey" value="'+escapeHtml(appState.config.finnhubApiKey)+'" placeholder="Tu API key de finnhub.io">' +
+          '<div class="section-sub" style="margin-top:4px">Gratis en finnhub.io → registrate → Dashboard → copiá la "API key".</div>' +
+        '</div>' +
+        '<div class="field"><label>Acciones a seguir (tickers separados por coma)</label>' +
+          '<input name="stockTickers" value="'+escapeHtml(appState.config.stockTickers)+'" placeholder="Ej: AAPL, GGAL, MELI, TSLA">' +
+        '</div>' +
+        '<div class="form-row">' +
+        '<div class="field"><label>Tema</label><select name="themeMode">' +
+          ['system','light','dark'].map(function(m){
+            var lbl = m==="system"?"Automático (según tu dispositivo)":m==="light"?"Claro":"Oscuro";
+            return '<option value="'+m+'"'+(appState.config.themeMode===m?' selected':'')+'>'+lbl+'</option>';
+          }).join("") +
+        '</select></div>' +
+        '<div class="field"><label>Paleta de color</label><select name="accentTheme">' +
+          Object.keys(ACCENT_THEMES).map(function(k){
+            return '<option value="'+k+'"'+(appState.config.accentTheme===k?' selected':'')+'>'+ACCENT_THEMES[k].label+'</option>';
+          }).join("") +
+        '</select></div>' +
+        '</div>' +
+        '<div class="field"><label>Clave de la API de Anthropic (opcional, para el Asistente)</label>' +
+          '<input name="aiApiKey" value="'+escapeHtml(appState.config.aiApiKey)+'" placeholder="sk-ant-...">' +
+          '<div class="section-sub" style="margin-top:4px">Se genera en console.anthropic.com → API Keys.</div>' +
+        '</div>' +
+        '<div class="field"><label>Modelo de IA</label>' +
+          '<input name="aiModel" value="'+escapeHtml(appState.config.aiModel)+'" placeholder="Ej: claude-haiku-4-5-20251001">' +
+          '<div class="section-sub" style="margin-top:4px">Revisá el nombre exacto del modelo que quieras usar en la documentación de Anthropic.</div>' +
+        '</div>' +
+        '<div class="form-actions"><button type="button" class="btn ghost" onclick="NV.closeModal()">Cancelar</button><button class="btn primary" type="submit">Guardar</button></div></form>' +
+        '<div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--line)"><button type="button" class="btn ghost" onclick="NV.logout()" style="width:100%">⎋ Cerrar sesión</button></div>';
+    }
+    return '<div class="overlay" onclick="if(event.target===this) NV.closeModal()"><div class="modal">'+content+'</div></div>';
+  }
+
+  function loginHtml(errorMsg){
+    return '<div class="chooser">' +
+      '<div><div class="brand-mark" style="margin:0 auto 16px;width:52px;height:52px;font-size:24px">IL</div>' +
+      '<h1>Ian y Lu</h1><p>Iniciá sesión para entrar al espacio compartido.</p></div>' +
+      (errorMsg ? '<div class="banner" style="max-width:300px">'+escapeHtml(errorMsg)+'</div>' : '') +
+      '<form onsubmit="NV.doLogin(event)" style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:280px">' +
+        '<input id="login-email" type="email" placeholder="Email" required autocomplete="username" ' +
+          'style="padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-size:15px;width:100%;box-sizing:border-box">' +
+        '<input id="login-pass" type="password" placeholder="Contraseña" required autocomplete="current-password" ' +
+          'style="padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font-size:15px;width:100%;box-sizing:border-box">' +
+        '<button type="submit" class="chooser-btn" id="login-btn" style="border-color:var(--wine);color:var(--wine);width:100%">Entrar</button>' +
+      '</form>' +
+    '</div>';
+  }
+
+  function showLoginScreen(errorMsg){
+    var app = document.getElementById("app");
+    app.innerHTML = loginHtml(errorMsg);
+  }
+
+  async function doLogin(ev){
+    ev.preventDefault();
+    var btn = document.getElementById("login-btn");
+    var email = document.getElementById("login-email").value.trim();
+    var pass = document.getElementById("login-pass").value;
+    if(btn){ btn.disabled = true; btn.textContent = "Entrando…"; }
+    try{
+      var res = await supabase.auth.signInWithPassword({ email: email, password: pass });
+      if(res.error){
+        showLoginScreen("No se pudo entrar: revisá el email y la contraseña.");
+      }
+      // on success, onAuthStateChange (SIGNED_IN) takes over and boots the app
+    }catch(e){
+      showLoginScreen("No se pudo conectar. Probá de nuevo.");
+    }
+  }
+
+  function afterLogin(sess){
+    session = sess;
+    applyRoleFromSession(sess);
+    try{ supabase.realtime.setAuth(sess.access_token); }catch(e){}
+    if(appBooted){ render(); return; }
+    appBooted = true;
+    render();
+    loadInitial();
+  }
+
+  function handleSignedOut(){
+    appBooted = false;
+    session = null;
+    state.role = null;
+    if(realtimeChannel){ try{ supabase.removeChannel(realtimeChannel); }catch(e){} realtimeChannel = null; }
+    appState = normalizeState(JSON.parse(JSON.stringify(DEFAULT_STATE)));
+    syncStatus = "connecting";
+    showLoginScreen();
+  }
+
+  function unknownAccountHtml(){
+    var email = (session && session.user && session.user.email) || "";
+    return '<div class="chooser">' +
+      '<div><div class="brand-mark" style="margin:0 auto 16px;width:52px;height:52px;font-size:24px">IL</div>' +
+      '<h1>Cuenta no reconocida</h1>' +
+      '<p>La cuenta <strong>'+escapeHtml(email)+'</strong> inició sesión bien, pero todavía no está asignada a Ian ni a Lu dentro de la app.</p>' +
+      '<p>Avisale a Ian para que la agregue en el código (ACCOUNT_ROLES).</p></div>' +
+      '<button type="button" class="btn ghost" onclick="NV.logout()">⎋ Cerrar sesión</button>' +
+      '</div>';
+  }
+
+  function syncLabel(){
+    if(syncStatus === "ok") return { cls:"", text:"Sincronizado" };
+    if(syncStatus === "connecting") return { cls:"off", text:"Conectando…" };
+    return { cls:"bad", text:"Sin conexión — reintentando" };
+  }
+
+  function captureModalValues(){
+    if(!state.modal) return null;
+    var modalEl = document.querySelector(".modal");
+    if(!modalEl) return null;
+    var values = {};
+    modalEl.querySelectorAll("input[name], textarea[name], select[name]").forEach(function(el){
+      values[el.name] = el.value;
+    });
+    return { modal: state.modal, values: values };
+  }
+
+  function restoreModalValues(snapshot){
+    if(!snapshot || snapshot.modal !== state.modal) return;
+    var modalEl = document.querySelector(".modal");
+    if(!modalEl) return;
+    Object.keys(snapshot.values).forEach(function(name){
+      var el = modalEl.querySelector('[name="' + name + '"]');
+      if(el && document.activeElement !== el) el.value = snapshot.values[name];
+    });
+  }
+
+  // Inline (non-modal) forms — like a goal's "aporte de este mes" field — get
+  // fully rebuilt on every render() too, so an in-progress background save or
+  // realtime update can silently wipe what someone is mid-typing. Same fix
+  // pattern as the modal capture/restore above, applied to those forms.
+  function captureInlineFormValues(){
+    var out = {};
+    document.querySelectorAll("form[data-goal-id]").forEach(function(f){
+      var val = f.amount && f.amount.value;
+      if(val) out[f.getAttribute("data-goal-id")] = val;
+    });
+    return out;
+  }
+  function restoreInlineFormValues(snapshot){
+    if(!snapshot) return;
+    Object.keys(snapshot).forEach(function(goalId){
+      var f = document.querySelector('form[data-goal-id="' + goalId + '"]');
+      if(f && f.amount) f.amount.value = snapshot[goalId];
+    });
+  }
+
+  function render(){
+    var app = document.getElementById("app");
+    var modalSnapshot = captureModalValues();
+    var inlineSnapshot = captureInlineFormValues();
+    if(!state.role){
+      app.innerHTML = unknownAccountHtml();
+      return;
+    }
+    syncDataView();
+    var nav = navItems();
+    var sync = syncLabel();
+    var sidebar =
+      '<div class="sidebar">' +
+        '<div class="brand"><div class="brand-mark">IL</div><div><div class="brand-name">Ian y Lu</div><div class="brand-date">'+new Date().toLocaleDateString("es-AR",{weekday:"long"})+'</div></div></div>' +
+        '<div class="nav-group">' +
+          '<button class="nav-item '+(state.section==='inicio'?'active':'')+'" onclick="NV.setSection(\'inicio\')"><span class="nav-ico">'+SECTION_ICON.inicio+'</span>Inicio</button>' +
+        '</div>' +
+        '<div><div class="nav-group-label">Compartido</div><div class="nav-group shared">' +
+          nav.shared.map(function(s){
+            return '<button class="nav-item '+(state.section===s?'active':'')+'" onclick="NV.setSection(\''+s+'\')"><span class="nav-ico">'+SECTION_ICON[s]+'</span>'+SECTION_TITLE[s]+'</button>';
+          }).join("") +
+        '</div></div>' +
+        '<div><div class="nav-group-label">Personal de '+escapeHtml(roleName(state.role))+'</div><div class="nav-group personal">' +
+          nav.personal.map(function(s){
+            return '<button class="nav-item '+(state.section===s?'active':'')+'" onclick="NV.setSection(\''+s+'\')"><span class="nav-ico">'+SECTION_ICON[s]+'</span>'+SECTION_TITLE[s]+'</button>';
+          }).join("") +
+        '</div></div>' +
+        '<div class="sidebar-foot">' +
+          '<div class="sync-note"><span class="dot '+sync.cls+'"></span>'+sync.text+'</div>' +
+          '<div class="account-pill">Ingresaste como <strong>'+escapeHtml(roleName(state.role))+'</strong></div>' +
+          '<button class="settings-btn" onclick="NV.openModal(\'settings\')">⚙ Configuración</button>' +
+          '<button class="settings-btn" onclick="NV.logout()">⎋ Cerrar sesión</button>' +
+        '</div>' +
+      '</div>';
+
+    var mobileTop = '<div class="mobile-top"><div class="brand"><div class="brand-mark" style="width:28px;height:28px;font-size:13px">IL</div><div class="brand-name" style="font-size:15px">Ian y Lu</div></div>' +
+      '<button class="settings-btn" onclick="NV.openModal(\'settings\')">⚙</button></div>';
+
+    var group = state.section === "inicio" ? "inicio" : (nav.shared.indexOf(state.section)!==-1 ? "shared" : "personal");
+    var mobileBar = '<div class="mobile-bar">' +
+      '<button class="'+(group==="inicio"?"active":"")+'" onclick="NV.goGroup(\'inicio\')"><span>'+SECTION_ICON.inicio+'</span>Inicio</button>' +
+      '<button class="'+(group==="shared"?"active":"")+'" onclick="NV.goGroup(\'shared\')"><span>◈</span>Compartido</button>' +
+      '<button class="'+(group==="personal"?"active":"")+'" onclick="NV.goGroup(\'personal\')"><span>◎</span>Personal</button>' +
+      '</div>';
+
+    var mobileChips = "";
+    if(group !== "inicio"){
+      var items = group === "shared" ? nav.shared : nav.personal;
+      mobileChips = '<div class="mobile-chips">' + items.map(function(s){
+        return '<button class="chip '+(state.section===s?'on':'')+'" onclick="NV.setSection(\''+s+'\')">'+SECTION_ICON[s]+' '+SECTION_TITLE[s]+'</button>';
+      }).join("") + '</div>';
+    }
+
+    var sectionFn = SECTION_RENDER[state.section] || sectionInicio;
+    var banner = (syncStatus === "error") ? '<div class="banner">No se pudo conectar con la base de datos compartida. Reintentando en segundo plano — tus cambios se van a guardar apenas vuelva la conexión.</div>' : '';
+
+    app.innerHTML = sidebar + mobileTop + mobileChips + '<main>' + banner + sectionFn() + '</main>' + mobileBar + modalHtml();
+    restoreModalValues(modalSnapshot);
+    restoreInlineFormValues(inlineSnapshot);
+  }
+
+  /* ---------------- boot / auth ---------------- */
+  supabase.auth.onAuthStateChange(function(event, sess){
+    if(sess && (event === "SIGNED_IN" || event === "INITIAL_SESSION" || event === "TOKEN_REFRESHED")){
+      afterLogin(sess);
+    } else if(event === "SIGNED_OUT" || (event === "INITIAL_SESSION" && !sess)){
+      handleSignedOut();
+    }
+  });
+  supabase.auth.getSession().then(function(res){
+    var sess = res.data && res.data.session;
+    if(sess){ afterLogin(sess); } else { showLoginScreen(); }
+  });
+
+  if("serviceWorker" in navigator){
+    window.addEventListener("load", function(){
+      navigator.serviceWorker.register("sw.js").catch(function(){ /* instalación opcional; la app funciona igual sin esto */ });
+    });
+  }
+})();
+</script>
+</body>
+</html>
